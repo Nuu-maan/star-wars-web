@@ -83,39 +83,42 @@ button {
   box-shadow:
     0 0 0 1px rgba(253, 241, 216, 0.08),
     0 2.5rem 6rem -2rem rgba(0, 0, 0, 0.9);
-  opacity: 0;
-  transform: scale(0.985);
-  transition:
-    opacity 900ms var(--ease-soft),
-    transform 1200ms var(--ease);
-}
-
-.book[data-ready="true"] .frame {
-  opacity: 1;
-  transform: none;
 }
 
 /* ---------- scene ---------- */
 
-/* The artwork is landscape, the frame may not be. Pinning the scene to a
+/* The artwork is landscape, the frame may not be. Pinning the stage to a
    landscape box wider than the frame keeps every layer's geometry (below)
-   valid in portrait instead of letting the diorama collapse vertically. */
-.scene,
-.hotspots {
+   valid in portrait instead of letting the diorama collapse vertically.
+   The stage only centres; GSAP owns the camera transform on .camera. */
+.stage {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 50%;
   aspect-ratio: 7 / 5;
   min-width: 100%;
-  transform: translateX(-50%) scale(var(--cam-scale))
-    translate3d(var(--cam-x), var(--cam-y), 0);
-  transition: transform 1500ms var(--ease);
+  translate: -50% 0;
+}
+
+.stage {
+  z-index: 0;
+}
+
+.camera {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.stage--spots {
+  z-index: 8;
+  pointer-events: none;
 }
 
 .scene {
-  z-index: 0;
-  will-change: transform;
+  position: absolute;
+  inset: 0;
 }
 
 .layer {
@@ -218,10 +221,11 @@ button {
   background: linear-gradient(
     to bottom,
     rgba(255, 214, 163, 0) 0%,
-    rgba(255, 226, 186, 0.45) 52%,
+    rgba(255, 226, 186, 0.28) 34%,
+    rgba(255, 226, 186, 0.32) 52%,
+    rgba(255, 222, 178, 0.16) 70%,
     rgba(255, 214, 163, 0) 100%
   );
-  filter: blur(22px);
 }
 
 .layer--dust {
@@ -231,7 +235,6 @@ button {
   bottom: -10%;
   opacity: calc(var(--mist) * 0.85);
   mix-blend-mode: screen;
-  transition: opacity 1500ms var(--ease-soft);
 }
 
 .layer--left {
@@ -270,15 +273,14 @@ button {
 .bloom {
   z-index: 3;
   background: radial-gradient(
-    46% 42% at 72% 27%,
-    rgba(255, 214, 152, 0.9),
-    rgba(255, 152, 84, 0.3) 44%,
-    transparent 74%
+    52% 48% at 72% 27%,
+    rgba(255, 214, 152, 0.85),
+    rgba(255, 173, 104, 0.42) 32%,
+    rgba(255, 140, 70, 0.14) 58%,
+    transparent 78%
   );
   opacity: var(--bloom);
   mix-blend-mode: screen;
-  filter: blur(26px);
-  transition: opacity 1600ms var(--ease-soft);
 }
 
 .tint {
@@ -286,15 +288,12 @@ button {
   background:
     linear-gradient(to bottom, rgba(10, 6, 10, 0.3), transparent 22%, transparent 56%, rgba(10, 5, 8, 0.7)),
     var(--tint);
-  transition: background 1500ms var(--ease-soft);
 }
 
 .veil {
   z-index: 6;
   opacity: calc(var(--mist) * 0.62);
   mix-blend-mode: screen;
-  filter: blur(2px);
-  transition: opacity 1500ms var(--ease-soft);
 }
 
 .veil img {
@@ -360,28 +359,6 @@ button {
   display: grid;
   padding: calc(var(--pad) * 1.5) var(--pad);
   pointer-events: none;
-  transition:
-    opacity 700ms var(--ease-soft),
-    transform 1100ms var(--ease),
-    filter 900ms var(--ease-soft);
-}
-
-.page[data-state="active"] {
-  opacity: 1;
-  transform: none;
-  filter: none;
-}
-
-.page[data-state="before"] {
-  opacity: 0;
-  transform: translate3d(0, -2.5%, 0) scale(1.07);
-  filter: blur(14px);
-}
-
-.page[data-state="after"] {
-  opacity: 0;
-  transform: translate3d(0, 3%, 0) scale(0.95);
-  filter: blur(14px);
 }
 
 .page[data-align="left"] {
@@ -550,8 +527,7 @@ button {
   border-radius: 50%;
   border: 1px solid var(--line);
   color: var(--ink-dim);
-  backdrop-filter: blur(8px);
-  background: rgba(18, 10, 14, 0.34);
+  background: rgba(18, 10, 14, 0.42);
   transition:
     color 260ms var(--ease-soft),
     border-color 260ms var(--ease-soft),
@@ -661,8 +637,8 @@ button {
 /* ---------- hotspots ---------- */
 
 .hotspots {
-  z-index: 8;
-  pointer-events: none;
+  position: absolute;
+  inset: 0;
 }
 
 .hotspot {
@@ -687,8 +663,7 @@ button {
 .hotspot__ring {
   inset: 0.75rem;
   border: 1px solid rgba(253, 241, 216, 0.85);
-  background: rgba(253, 241, 216, 0.14);
-  backdrop-filter: blur(3px);
+  background: rgba(253, 241, 216, 0.16);
   transition: inset 400ms var(--ease);
 }
 
@@ -723,16 +698,13 @@ button {
 /* ---------- field note ---------- */
 
 @media (min-width: 901px) {
-  .frame:has(.note) .page[data-state="active"] {
-    translate: -13% 0;
+  /* shift the copy, not the article: the article carries the scrim. */
+  .frame:has(.note) .page:not([inert]) .page__copy {
+    translate: -10% 0;
   }
 
-  .page {
-    transition:
-      opacity 700ms var(--ease-soft),
-      transform 1100ms var(--ease),
-      translate 620ms var(--ease),
-      filter 900ms var(--ease-soft);
+  .page__copy {
+    transition: translate 620ms var(--ease);
   }
 }
 
@@ -746,10 +718,8 @@ button {
   padding: clamp(1.4rem, 2.2vw, 2rem);
   border-radius: 1rem;
   border: 1px solid var(--line);
-  background: rgba(20, 11, 15, 0.76);
-  backdrop-filter: blur(18px) saturate(1.2);
+  background: rgba(23, 13, 18, 0.94);
   box-shadow: 0 1.5rem 4rem -1rem rgba(0, 0, 0, 0.8);
-  animation: note-in 520ms var(--ease) both;
 }
 
 .note h2 {
@@ -902,26 +872,9 @@ a:focus-visible {
   .hint i::after {
     animation: wheel 1.9s var(--ease-soft) infinite;
   }
-
-  .page[data-state="active"] .page__copy > * {
-    animation: rise 900ms var(--ease) both;
-  }
-
-  .page[data-state="active"] .page__copy > :nth-child(2) {
-    animation-delay: 90ms;
-  }
-
-  .page[data-state="active"] .page__copy > :nth-child(3) {
-    animation-delay: 170ms;
-  }
-
-  .page[data-state="active"] .page__copy > :nth-child(4) {
-    animation-delay: 250ms;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scene,
   .page,
   .frame {
     transition-duration: 1ms;
@@ -968,24 +921,6 @@ a:focus-visible {
   100% {
     transform: translateY(0.55rem);
     opacity: 0;
-  }
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(1.1rem);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes note-in {
-  from {
-    opacity: 0;
-    transform: translateX(1.5rem);
   }
 }
 

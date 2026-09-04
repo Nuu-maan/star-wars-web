@@ -36,6 +36,9 @@ export type Camera = {
   y: number;
 };
 
+/** [r, g, b, a] so the grade can be interpolated between pages. */
+export type Tint = [number, number, number, number];
+
 export type StoryPage = {
   id: string;
   numeral: string;
@@ -46,7 +49,7 @@ export type StoryPage = {
   quote?: string;
   align: "left" | "center" | "right";
   camera: Camera;
-  tint: string;
+  tint: Tint;
   mist: number;
   bloom: number;
   hotspots: Hotspot[];
@@ -62,7 +65,7 @@ export const storyPages: StoryPage[] = [
     body: "Two suns, one horizon, and a boy who kept looking at it. Before the rebellion, before the legend, there was only the long dry patience of this place.",
     align: "left",
     camera: { scale: 1.04, x: 0, y: 0 },
-    tint: "rgba(24, 12, 16, 0.16)",
+    tint: [24, 12, 16, 0.16],
     mist: 0.5,
     bloom: 0.25,
     hotspots: [
@@ -90,7 +93,7 @@ export const storyPages: StoryPage[] = [
     body: "Luke Skywalker repaired vaporators, chased another harvest, and watched ships become silver scratches in the high blue sky. He was useful here. He was loved here. Part of him was always somewhere else.",
     align: "left",
     camera: { scale: 1.55, x: 16.5, y: 8 },
-    tint: "rgba(30, 14, 10, 0.2)",
+    tint: [30, 14, 10, 0.2],
     mist: 0.28,
     bloom: 0.18,
     hotspots: [
@@ -119,7 +122,7 @@ export const storyPages: StoryPage[] = [
     quote: "Somewhere beyond the ridge, the future was already looking for him.",
     align: "left",
     camera: { scale: 1.3, x: -10, y: 12 },
-    tint: "rgba(104, 38, 14, 0.3)",
+    tint: [104, 38, 14, 0.3],
     mist: 0.22,
     bloom: 0.58,
     hotspots: [
@@ -147,7 +150,7 @@ export const storyPages: StoryPage[] = [
     body: "It was incomplete and frightened — a stranger asking for help. Luke could have looked away. Instead he leaned closer. Great journeys sometimes begin with the simple decision to listen.",
     align: "center",
     camera: { scale: 1.78, x: 9, y: 11 },
-    tint: "rgba(14, 8, 14, 0.42)",
+    tint: [14, 8, 14, 0.42],
     mist: 0.92,
     bloom: 0.1,
     hotspots: [
@@ -175,7 +178,7 @@ export const storyPages: StoryPage[] = [
     body: "To understand why Luke leaves, remember what asked him to stay: a home sturdy enough to dream from, and precious enough to make the leaving hurt.",
     align: "center",
     camera: { scale: 1, x: 0, y: -3 },
-    tint: "rgba(20, 10, 14, 0.3)",
+    tint: [20, 10, 14, 0.3],
     mist: 0.42,
     bloom: 0.4,
     hotspots: [],
