@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 
 import { sceneLayers, storyPages } from "@/data/story";
 
 const TURN_LOCK_MS = 820;
 
 export function TatooineExperience() {
+  const frameRef = useRef<HTMLDivElement>(null);
   const lockedUntil = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
@@ -107,9 +109,49 @@ export function TatooineExperience() {
     };
   }, [turn]);
 
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const layers = Array.from(frame.querySelectorAll<HTMLElement>("[data-depth]"));
+    const movers = layers.map((layer) => ({
+      depth: Number(layer.dataset.depth ?? 1),
+      x: gsap.quickTo(layer, "x", { duration: 0.85, ease: "power3.out" }),
+      y: gsap.quickTo(layer, "y", { duration: 0.85, ease: "power3.out" }),
+    }));
+
+    const onMove = (event: PointerEvent) => {
+      const x = event.clientX / window.innerWidth - 0.5;
+      const y = event.clientY / window.innerHeight - 0.5;
+
+      movers.forEach((mover) => {
+        mover.x(x * mover.depth * -16);
+        mover.y(y * mover.depth * -9);
+      });
+    };
+
+    const onLeave = () => {
+      movers.forEach((mover) => {
+        mover.x(0);
+        mover.y(0);
+      });
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+      gsap.killTweensOf(layers);
+    };
+  }, []);
+
   return (
     <main className="book" data-ready={ready}>
       <div
+        ref={frameRef}
         className="frame"
         style={
           {
