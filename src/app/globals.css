@@ -821,3 +821,45 @@ button {
     display: none;
   }
 }
+
+/* ---------- focus + hover ---------- */
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .turn:not(:disabled):hover {
+    color: var(--bg);
+    background: var(--ink);
+    border-color: var(--ink);
+    transform: scale(1.06);
+  }
+
+  .tick:hover {
+    color: var(--ink);
+  }
+
+  .tick:hover::after {
+    transform: scaleX(0.7);
+  }
+
+  .hotspot:hover .hotspot__ring,
+  .hotspot:focus-visible .hotspot__ring {
+    inset: 0.45rem;
+  }
+
+  .hotspot:hover .hotspot__label,
+  .hotspot:focus-visible .hotspot__label {
+    opacity: 1;
+    transform: none;
+  }
+
+  .note__close:hover {
+    color: var(--ink);
+    background: rgba(253, 241, 216, 0.1);
+  }
+}
