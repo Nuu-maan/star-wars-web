@@ -208,6 +208,11 @@ export function TatooineExperience() {
         <div className="grain" aria-hidden="true" />
         <div className="vignette" aria-hidden="true" />
 
+        <p className="visually-hidden">
+          An illustrated desert settlement stretches beneath the twin suns of Tatooine, framed by
+          dark sandstone cliffs.
+        </p>
+
         <header className="chrome chrome--top">
           <p className="mark">
             <span className="mark__orbit" aria-hidden="true" />
@@ -235,6 +240,8 @@ export function TatooineExperience() {
                 entryIndex === index ? "active" : entryIndex < index ? "before" : "after"
               }
               data-align={entry.align}
+              aria-hidden={entryIndex !== index}
+              inert={entryIndex !== index}
             >
               <div className="page__copy">
                 <p className="page__kicker">{entry.kicker}</p>
@@ -328,6 +335,10 @@ export function TatooineExperience() {
         <p className="hint" data-visible={index === 0}>
           <i aria-hidden="true" />
           Scroll, swipe or use ← → to turn the page
+        </p>
+
+        <p className="visually-hidden" role="status" aria-live="polite">
+          Page {index + 1} of {storyPages.length}. {page.chapter}.
         </p>
       </div>
 
