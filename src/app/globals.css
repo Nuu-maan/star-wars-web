@@ -722,6 +722,20 @@ button {
 
 /* ---------- field note ---------- */
 
+@media (min-width: 901px) {
+  .frame:has(.note) .page[data-state="active"] {
+    translate: -13% 0;
+  }
+
+  .page {
+    transition:
+      opacity 700ms var(--ease-soft),
+      transform 1100ms var(--ease),
+      translate 620ms var(--ease),
+      filter 900ms var(--ease-soft);
+  }
+}
+
 .note {
   position: absolute;
   z-index: 11;
