@@ -95,12 +95,24 @@ button {
 
 /* ---------- scene ---------- */
 
-.scene {
+/* The artwork is landscape, the frame may not be. Pinning the scene to a
+   landscape box wider than the frame keeps every layer's geometry (below)
+   valid in portrait instead of letting the diorama collapse vertically. */
+.scene,
+.hotspots {
   position: absolute;
-  inset: 0;
-  z-index: 0;
-  transform: scale(var(--cam-scale)) translate3d(var(--cam-x), var(--cam-y), 0);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  aspect-ratio: 7 / 5;
+  min-width: 100%;
+  transform: translateX(-50%) scale(var(--cam-scale))
+    translate3d(var(--cam-x), var(--cam-y), 0);
   transition: transform 1500ms var(--ease);
+}
+
+.scene {
+  z-index: 0;
   will-change: transform;
 }
 
@@ -647,12 +659,8 @@ button {
 /* ---------- hotspots ---------- */
 
 .hotspots {
-  position: absolute;
-  inset: 0;
   z-index: 8;
   pointer-events: none;
-  transform: scale(var(--cam-scale)) translate3d(var(--cam-x), var(--cam-y), 0);
-  transition: transform 1500ms var(--ease);
 }
 
 .hotspot {
@@ -977,8 +985,8 @@ a:focus-visible {
   }
 
   .layer--settlement {
-    left: 0;
-    width: 62%;
+    left: 2%;
+    width: 40%;
   }
 }
 
