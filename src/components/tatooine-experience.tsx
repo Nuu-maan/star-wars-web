@@ -10,6 +10,7 @@ const TURN_LOCK_MS = 820;
 
 export function TatooineExperience() {
   const frameRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
   const lockedUntil = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
@@ -122,6 +123,10 @@ export function TatooineExperience() {
       y: gsap.quickTo(layer, "y", { duration: 0.85, ease: "power3.out" }),
     }));
 
+    const cursor = cursorRef.current;
+    const cursorX = cursor ? gsap.quickTo(cursor, "x", { duration: 0.32, ease: "power3.out" }) : null;
+    const cursorY = cursor ? gsap.quickTo(cursor, "y", { duration: 0.32, ease: "power3.out" }) : null;
+
     const onMove = (event: PointerEvent) => {
       const x = event.clientX / window.innerWidth - 0.5;
       const y = event.clientY / window.innerHeight - 0.5;
@@ -130,6 +135,10 @@ export function TatooineExperience() {
         mover.x(x * mover.depth * -16);
         mover.y(y * mover.depth * -9);
       });
+
+      cursorX?.(event.clientX);
+      cursorY?.(event.clientY);
+      cursor?.setAttribute("data-visible", "true");
     };
 
     const onLeave = () => {
@@ -137,6 +146,7 @@ export function TatooineExperience() {
         mover.x(0);
         mover.y(0);
       });
+      cursor?.setAttribute("data-visible", "false");
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -273,6 +283,8 @@ export function TatooineExperience() {
           Scroll, swipe or use ← → to turn the page
         </p>
       </div>
+
+      <div ref={cursorRef} className="cursor" data-visible="false" aria-hidden="true" />
     </main>
   );
 }
