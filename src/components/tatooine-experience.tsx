@@ -9,6 +9,7 @@ const TURN_LOCK_MS = 820;
 
 export function TatooineExperience() {
   const lockedUntil = useRef(0);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const [index, setIndex] = useState(0);
   const [ready, setReady] = useState(false);
@@ -71,6 +72,40 @@ export function TatooineExperience() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [goTo, turn]);
+
+  useEffect(() => {
+    const onWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) < 12) return;
+      turn(event.deltaY > 0 ? 1 : -1);
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      const touch = event.changedTouches[0];
+      touchStart.current = { x: touch.clientX, y: touch.clientY };
+    };
+
+    const onTouchEnd = (event: TouchEvent) => {
+      const start = touchStart.current;
+      if (!start) return;
+      touchStart.current = null;
+
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - start.x;
+      const dy = touch.clientY - start.y;
+      const travel = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+      if (Math.abs(travel) < 48) return;
+      turn(travel < 0 ? 1 : -1);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [turn]);
 
   return (
     <main className="book" data-ready={ready}>
@@ -190,6 +225,11 @@ export function TatooineExperience() {
             <span aria-hidden="true">→</span>
           </button>
         </nav>
+
+        <p className="hint" data-visible={index === 0}>
+          <i aria-hidden="true" />
+          Scroll, swipe or use ← → to turn the page
+        </p>
       </div>
     </main>
   );
