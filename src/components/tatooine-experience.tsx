@@ -1,11 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { sceneLayers, storyPages } from "@/data/story";
 
+const TURN_LOCK_MS = 820;
+
 export function TatooineExperience() {
+  const lockedUntil = useRef(0);
+
   const [index, setIndex] = useState(0);
   const [ready, setReady] = useState(false);
 
@@ -20,10 +24,53 @@ export function TatooineExperience() {
     });
   }, []);
 
+  const turn = useCallback(
+    (direction: -1 | 1) => {
+      const now = performance.now();
+      if (now < lockedUntil.current) return;
+      lockedUntil.current = now + TURN_LOCK_MS;
+      setIndex((current) => {
+        const next = Math.max(0, Math.min(storyPages.length - 1, current + direction));
+        return next;
+      });
+    },
+    [],
+  );
+
   useEffect(() => {
     const id = window.setTimeout(() => setReady(true), 80);
     return () => window.clearTimeout(id);
   }, []);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowRight":
+        case "ArrowDown":
+        case "PageDown":
+        case " ":
+          event.preventDefault();
+          turn(1);
+          return;
+        case "ArrowLeft":
+        case "ArrowUp":
+        case "PageUp":
+          event.preventDefault();
+          turn(-1);
+          return;
+        case "Home":
+          event.preventDefault();
+          goTo(0);
+          return;
+        case "End":
+          event.preventDefault();
+          goTo(storyPages.length - 1);
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [goTo, turn]);
 
   return (
     <main className="book" data-ready={ready}>
