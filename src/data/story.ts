@@ -19,3 +19,37 @@ export const sceneLayers: SceneLayer[] = [
   { id: "right", src: "/assets/tatooine/foreground-right.png", depth: 2.45, sizes: "60vw" },
   { id: "center", src: "/assets/tatooine/foreground-center.png", depth: 2.9, sizes: "80vw" },
 ];
+
+export type Hotspot = {
+  id: string;
+  x: number;
+  y: number;
+  label: string;
+  title: string;
+  body: string;
+  facts: [string, string][];
+};
+
+export type Camera = {
+  scale: number;
+  x: number;
+  y: number;
+};
+
+export type StoryPage = {
+  id: string;
+  numeral: string;
+  chapter: string;
+  kicker: string;
+  title: string;
+  body: string;
+  quote?: string;
+  align: "left" | "center" | "right";
+  camera: Camera;
+  tint: string;
+  mist: number;
+  bloom: number;
+  hotspots: Hotspot[];
+};
+
+export const storyPages: StoryPage[] = [];
