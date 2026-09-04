@@ -863,3 +863,108 @@ a:focus-visible {
     background: rgba(253, 241, 216, 0.1);
   }
 }
+
+/* ---------- motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .layer--dust {
+    animation: drift 26s var(--ease-soft) infinite alternate;
+  }
+
+  .veil img {
+    animation: drift-front 34s var(--ease-soft) infinite alternate;
+  }
+
+  .hotspot__pulse {
+    animation: pulse 2.6s var(--ease) infinite;
+  }
+
+  .hint i::after {
+    animation: wheel 1.9s var(--ease-soft) infinite;
+  }
+
+  .page[data-state="active"] .page__copy > * {
+    animation: rise 900ms var(--ease) both;
+  }
+
+  .page[data-state="active"] .page__copy > :nth-child(2) {
+    animation-delay: 90ms;
+  }
+
+  .page[data-state="active"] .page__copy > :nth-child(3) {
+    animation-delay: 170ms;
+  }
+
+  .page[data-state="active"] .page__copy > :nth-child(4) {
+    animation-delay: 250ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .page,
+  .frame {
+    transition-duration: 1ms;
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-2%, 0.6%, 0) scale(1.02);
+  }
+  to {
+    transform: translate3d(2.4%, -1.4%, 0) scale(1.08);
+  }
+}
+
+@keyframes drift-front {
+  from {
+    transform: translate3d(-6%, 2%, 0) scale(1.35);
+  }
+  to {
+    transform: translate3d(6%, -3%, 0) scale(1.5);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@keyframes wheel {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0.55rem);
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes note-in {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
