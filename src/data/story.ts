@@ -154,7 +154,7 @@ export const storyPages: StoryPage[] = [
       {
         id: "transmission",
         x: 24,
-        y: 56,
+        y: 50,
         label: "Recovered transmission",
         title: "…help me. You're my only hope.",
         body: "A princess. A rebellion. A plea that will make this small world impossible to return to unchanged.",
