@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-import { sceneLayers, storyPages } from "@/data/story";
+import { sceneLayers, storyPages, type Hotspot } from "@/data/story";
 
 const TURN_LOCK_MS = 820;
 
@@ -15,6 +15,7 @@ export function TatooineExperience() {
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const [index, setIndex] = useState(0);
+  const [note, setNote] = useState<Hotspot | null>(null);
   const [ready, setReady] = useState(false);
 
   const page = storyPages[index];
@@ -24,6 +25,7 @@ export function TatooineExperience() {
     const clamped = Math.max(0, Math.min(storyPages.length - 1, next));
     setIndex((current) => {
       if (clamped === current) return current;
+      setNote(null);
       return clamped;
     });
   }, []);
@@ -35,6 +37,7 @@ export function TatooineExperience() {
       lockedUntil.current = now + TURN_LOCK_MS;
       setIndex((current) => {
         const next = Math.max(0, Math.min(storyPages.length - 1, current + direction));
+        if (next !== current) setNote(null);
         return next;
       });
     },
@@ -49,6 +52,9 @@ export function TatooineExperience() {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       switch (event.key) {
+        case "Escape":
+          setNote(null);
+          return;
         case "ArrowRight":
         case "ArrowDown":
         case "PageDown":
@@ -239,6 +245,47 @@ export function TatooineExperience() {
             </article>
           ))}
         </div>
+
+        <div className="hotspots">
+          {page.hotspots.map((hotspot) => (
+            <button
+              key={hotspot.id}
+              className="hotspot"
+              type="button"
+              style={{ left: `${hotspot.x}%`, top: `${hotspot.y}%` }}
+              aria-expanded={note?.id === hotspot.id}
+              onClick={() => setNote((current) => (current?.id === hotspot.id ? null : hotspot))}
+            >
+              <span className="hotspot__pulse" aria-hidden="true" />
+              <span className="hotspot__ring" aria-hidden="true" />
+              <span className="hotspot__label">{hotspot.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {note && (
+          <aside className="note" aria-label={note.title}>
+            <button
+              className="note__close"
+              type="button"
+              aria-label="Close field note"
+              onClick={() => setNote(null)}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            <p className="note__index">Field note · {page.numeral}</p>
+            <h2>{note.title}</h2>
+            <p className="note__body">{note.body}</p>
+            <dl>
+              {note.facts.map(([term, value]) => (
+                <div key={term}>
+                  <dt>{term}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+        )}
 
         <nav className="chrome chrome--bottom" aria-label="Story pages">
           <button
