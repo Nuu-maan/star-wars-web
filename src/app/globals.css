@@ -647,3 +647,69 @@ button {
   border-radius: 1px;
   background: var(--accent);
 }
+
+/* ---------- hotspots ---------- */
+
+.hotspots {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  transform: scale(var(--cam-scale)) translate3d(var(--cam-x), var(--cam-y), 0);
+  transition: transform 1500ms var(--ease);
+}
+
+.hotspot {
+  position: absolute;
+  translate: -50% -50%;
+  scale: calc(1 / var(--cam-scale));
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  color: var(--ink);
+}
+
+.hotspot__dot,
+.hotspot__ring,
+.hotspot__pulse {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hotspot__ring {
+  inset: 0.75rem;
+  border: 1px solid rgba(253, 241, 216, 0.85);
+  background: rgba(253, 241, 216, 0.14);
+  backdrop-filter: blur(3px);
+  transition: inset 400ms var(--ease);
+}
+
+.hotspot__ring::after {
+  content: "";
+  position: absolute;
+  inset: 0.28rem;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.hotspot__pulse {
+  inset: 0.75rem;
+  border: 1px solid rgba(253, 241, 216, 0.7);
+}
+
+.hotspot__label {
+  position: absolute;
+  left: 2.4rem;
+  white-space: nowrap;
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transform: translateX(-0.4rem);
+  transition:
+    opacity 320ms var(--ease-soft),
+    transform 320ms var(--ease);
+}
