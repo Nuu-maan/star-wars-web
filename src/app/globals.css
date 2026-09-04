@@ -258,6 +258,65 @@ button {
   bottom: 1%;
 }
 
+/* ---------- chapter two: the homestead ---------- */
+
+.layer--hs-room {
+  inset: -4%;
+}
+
+.layer--hs-droid,
+.layer--hs-mechanic,
+.layer--hs-envoy {
+  height: auto;
+}
+
+.layer--hs-droid img,
+.layer--hs-mechanic img,
+.layer--hs-envoy img {
+  object-fit: contain;
+}
+
+/* The room's own table sits at ~53% / 65% of the plate; the cast is placed
+   around it, and the img translateY drops each cutout's feet onto the floor. */
+.layer--hs-mechanic {
+  left: 24%;
+  width: 14%;
+  aspect-ratio: 2 / 3;
+  bottom: 19%;
+}
+
+.layer--hs-mechanic img {
+  transform: translateY(4%);
+}
+
+.layer--hs-droid {
+  left: 62%;
+  width: 10%;
+  aspect-ratio: 2 / 3;
+  bottom: 17%;
+}
+
+.layer--hs-droid img {
+  transform: translateY(2%);
+}
+
+.layer--hs-envoy {
+  left: 45%;
+  width: 15%;
+  aspect-ratio: 2 / 3;
+  bottom: 36%;
+  mix-blend-mode: screen;
+}
+
+.layer--hs-arch {
+  inset: -3%;
+  opacity: 0.5;
+}
+
+.layer--hs-arch img {
+  object-fit: cover;
+}
+
 /* ---------- atmosphere ---------- */
 
 .bloom,
@@ -695,6 +754,89 @@ button {
     transform 320ms var(--ease);
 }
 
+
+/* ---------- transmission ---------- */
+
+.signal {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: start;
+}
+
+.signal__play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 1.3rem;
+  border: 1px solid var(--line);
+  border-radius: 2rem;
+  font-size: clamp(0.6rem, 0.72vw, 0.7rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: rgba(18, 12, 22, 0.5);
+  transition:
+    color 260ms var(--ease-soft),
+    background 260ms var(--ease-soft),
+    border-color 260ms var(--ease-soft);
+}
+
+.signal__play:disabled {
+  cursor: default;
+  color: var(--ink-dim);
+}
+
+.signal__wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 0.85rem;
+}
+
+.signal__wave i {
+  width: 2px;
+  height: 100%;
+  border-radius: 1px;
+  background: #7fd8ff;
+  transform: scaleY(0.4);
+}
+
+.signal__log {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  font-family: var(--font-ui), monospace;
+  font-size: clamp(0.72rem, 0.88vw, 0.84rem);
+  letter-spacing: 0.02em;
+  color: #bfe4f5;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+}
+
+.signal__log li {
+  animation: signal-line 500ms var(--ease) both;
+}
+
+.signal__closing {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(0.95rem, 1.2vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--ink);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.75);
+  animation: signal-line 700ms var(--ease) both;
+}
+
+@keyframes signal-line {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
 /* ---------- field note ---------- */
 
 @media (min-width: 901px) {
@@ -872,6 +1014,22 @@ a:focus-visible {
   .hint i::after {
     animation: wheel 1.9s var(--ease-soft) infinite;
   }
+
+  .signal__wave i {
+    animation: signal-wave 780ms var(--ease-soft) infinite alternate;
+  }
+
+  .signal__wave i:nth-child(2) {
+    animation-delay: -260ms;
+  }
+
+  .signal__wave i:nth-child(3) {
+    animation-delay: -520ms;
+  }
+
+  .signal__wave i:nth-child(4) {
+    animation-delay: -130ms;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1009,7 +1167,12 @@ a:focus-visible {
   }
 
   .tick {
-    padding: 0.45rem 0.4rem 0.75rem;
+    padding: 0.45rem 0.22rem 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  .tick__numeral {
+    font-size: 0.78rem;
   }
 }
 
@@ -1020,5 +1183,14 @@ a:focus-visible {
 
   .page:first-child .page__title {
     font-size: clamp(2.6rem, 9vh, 4.5rem);
+  }
+}
+
+@keyframes signal-wave {
+  from {
+    transform: scaleY(0.3);
+  }
+  to {
+    transform: scaleY(1);
   }
 }
