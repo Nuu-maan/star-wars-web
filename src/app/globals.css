@@ -190,14 +190,10 @@ button {
 
 .layer--ground {
   left: -8%;
-  right: -8%;
-  top: 42%;
-  bottom: -12%;
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 26%);
-}
-
-.layer--ground img {
-  object-position: 50% 92%;
+  width: 116%;
+  aspect-ratio: 1536 / 536;
+  top: 46%;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 14%);
 }
 
 .layer--haze {
