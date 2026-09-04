@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Waiting World — a scroll-driven comic</title>
+<meta name="description" content="Two suns, one horizon, and a boy who kept looking at it. An illustrated science-fantasy story you read by scrolling.">
+<meta property="og:title" content="The Waiting World">
+<meta property="og:description" content="An illustrated science-fantasy story you read by scrolling.">
+<meta property="og:image" content="assets/poster/key-art-panorama-1536.webp">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="skip" type="button">Skip the animation</button>
+
+<div id="loader" aria-hidden="true">
+  <p class="loader__eyebrow">A scroll-driven comic</p>
+  <p class="loader__title">The Waiting World</p>
+  <p class="loader__sub">Part One</p>
+</div>
+
+<div id="veil" aria-hidden="true">
+  <p class="chapter" data-chapter="2"><span>Act II</span>The Message</p>
+  <p class="chapter" data-chapter="3"><span>Act III</span>Into the Dune Sea</p>
+</div>
+<div id="progress" aria-hidden="true"></div>
+
+<main>
+
+<section class="act act1" id="act-1" data-range="6"
+  data-cam="t:0 s:1 fx:50 fy:50; t:.25 s:1.06 fx:47 fy:50; t:.5 s:1.55 fx:24 fy:50; t:.75 s:1.2 fx:70 fy:24; t:1 s:1.75 fx:55 fy:52">
+  <div class="act__sticky">
+    <h2 class="visually-hidden">Act I: The Waiting World</h2>
+    <div class="stage" aria-hidden="true"><div class="camera">
+      <div class="layer l-sky" data-depth=".02"><img src="assets/01-waiting-world/bg-sky-1536.webp" srcset="assets/01-waiting-world/bg-sky-1280.webp 1280w, assets/01-waiting-world/bg-sky-1536.webp 1536w" sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-suns" data-depth=".05"><img src="assets/01-waiting-world/fx-twin-suns-1280.webp" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-ridges" data-depth=".12"><img src="assets/01-waiting-world/mid-far-ridges-1672.webp" srcset="assets/01-waiting-world/mid-far-ridges-1280.webp 1280w, assets/01-waiting-world/mid-far-ridges-1672.webp 1672w" sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-mesas" data-depth=".22"><img src="assets/01-waiting-world/mid-mesas-2172.webp" srcset="assets/01-waiting-world/mid-mesas-1280.webp 1280w, assets/01-waiting-world/mid-mesas-2172.webp 2172w" sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-ground" data-depth=".5"><img src="assets/01-waiting-world/ground-desert-1536.webp" srcset="assets/01-waiting-world/ground-desert-1280.webp 1280w, assets/01-waiting-world/ground-desert-1536.webp 1536w" sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-settlement" data-depth=".6"><img src="assets/01-waiting-world/mid-settlement-1672.webp" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-dust" data-depth=".9" data-key="t:0 o:.9; t:.5; t:.7 o:.3; t:.9 o:1"><img src="assets/01-waiting-world/fx-dust-1280.webp" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-shade" data-depth="0" data-key="t:0 o:0; t:.8; t:1 o:.6"></div>
+      <div class="layer l-rocks-l" data-depth="1.6"><img src="assets/01-waiting-world/fg-rocks-left-1280.webp" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-rocks-r" data-depth="1.6"><img src="assets/01-waiting-world/fg-rocks-right-1280.webp" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+      <div class="layer l-lip" data-depth="2.2"><img src="assets/01-waiting-world/fg-ridge-center-1536.webp" srcset="assets/01-waiting-world/fg-ridge-center-1280.webp 1280w, assets/01-waiting-world/fg-ridge-center-1536.webp 1536w" sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="sync"></div>
+    </div></div>
+    <div class="act__ui">
+      <section class="scene" data-from="0" data-to=".25">
+        <h3 class="visually-hidden">Scene one: Two Suns</h3>
+        <p class="visually-hidden">A wide desert valley under two suns. Red cliffs frame the view on both sides. A small domed settlement sits below a line of distant mesas, and dust drifts across the floor of the valley.</p>
+        <h1 class="title tc" data-in="0" data-out=".14">The Waiting World</h1>
+        <p class="hint bc" data-in="0" data-out=".14">Scroll to begin<span></span></p>
+        <p class="caption tl" data-in=".2" data-out=".55">Two suns, one horizon, and a boy who kept looking at it.</p>
+        <p class="caption br" data-in=".6" data-out=".98">Before any of it went wrong, there was only the long dry patience of this place.</p>
+      </section>
+      <section class="scene" data-from=".25" data-to=".5">
+        <h3 class="visually-hidden">Scene two: The Settlement</h3>
+        <p class="visually-hidden">The camera pushes in on the domed settlement, a huddle of pale buildings and antenna towers on the valley floor.</p>
+        <p class="caption tr" data-in=".1" data-out=".4">Everything he had ever owned fit inside one bend of the road.</p>
+        <p class="balloon balloon--off" data-in=".45" data-out=".68"><b>Mechanic:</b> “Another season. That’s all. One more and I’m gone.”</p>
+        <p class="caption bl" data-in=".7" data-out=".98">He had been saying it for four years.</p>
+      </section>
+      <section class="scene" data-from=".5" data-to=".75">
+        <h3 class="visually-hidden">Scene three: What Leaving Looks Like</h3>
+        <p class="visually-hidden">The view tilts up from the valley to the sky, where the two suns hang close together. The dust thins.</p>
+        <p class="caption bl" data-in=".15" data-out=".55">Ships left every week. He could name all of them by their engine note.</p>
+        <p class="caption tl" data-in=".6" data-out=".98">The suns always set together. He watched them alone.</p>
+      </section>
+      <section class="scene" data-from=".75" data-to="1">
+        <h3 class="visually-hidden">Scene four: Something Comes Down</h3>
+        <p class="visually-hidden">A fast push toward the horizon. The light drops and the dust thickens over the valley floor.</p>
+        <p class="caption tl" data-in=".1" data-out=".42">The thing that changed it did not arrive like an omen.</p>
+        <p class="caption tr" data-in=".45" data-out=".72">It came down badly, three kilometres out, trailing smoke and complaining.</p>
+        <p class="balloon balloon--off bc" data-in=".75" data-out="1"><b>Mechanic:</b> “…that’s not a ship.”</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="act act2" id="act-2" data-range="3"
+  data-cam="t:0 s:1 fx:50 fy:55; t:.22 s:1.1 fx:50 fy:56; t:.44 s:1.45 fx:57 fy:62; t:.59 s:1.7 fx:52 fy:60; t:.75; t:1 s:1.25 fx:50 fy:55">
+  <div class="act__sticky">
+    <h2 class="visually-hidden">Act II: The Message</h2>
+    <div class="stage" aria-hidden="true"><div class="camera">
+      <div class="layer l-room" data-depth=".08"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/02-the-message/bg-homestead-1672.webp" data-srcset="assets/02-the-message/bg-homestead-1280.webp 1280w, assets/02-the-message/bg-homestead-1672.webp 1672w" sizes="100vw" alt=""></div>
+      <div class="layer l-droid" data-depth=".5" data-key="t:0 o:0 y:-6; t:.22; t:.27 o:1 y:0"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/02-the-message/char-droid-1024.webp" alt=""></div>
+      <div class="layer l-envoy" data-depth=".45" data-key="t:0 o:0; t:.44; t:.5 o:1"><div class="holo"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/02-the-message/char-envoy-1024.webp" alt=""></div></div>
+      <div class="layer l-mechanic" data-depth=".7"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/02-the-message/char-mechanic-1024.webp" alt=""></div>
+      <div class="layer l-arch" data-depth="2.4"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/02-the-message/fg-arch-1672.webp" data-srcset="assets/02-the-message/fg-arch-1280.webp 1280w, assets/02-the-message/fg-arch-1672.webp 1672w" sizes="100vw" alt=""></div>
+    </div></div>
+    <div class="act__ui">
+      <section class="scene" data-from="0" data-to=".22">
+        <h3 class="visually-hidden">Scene five: Out of the Heat</h3>
+        <p class="visually-hidden">Inside a homestead: thick curved walls, a sunken seating pit around a round table, and an arched doorway open on the sunset. The young mechanic stands to the left of the table.</p>
+        <p class="caption tl" data-in=".18" data-out=".5">Inside, the day gave up at the door.</p>
+        <p class="caption br" data-in=".55" data-out=".98">Thick walls, cool air, and the particular quiet of a room built to outlast weather.</p>
+      </section>
+      <section class="scene" data-from=".22" data-to=".44">
+        <h3 class="visually-hidden">Scene six: It Would Not Say</h3>
+        <p class="visually-hidden">The camera pushes toward a battered courier droid squatting on the round table. The mechanic leans over it.</p>
+        <p class="caption tr" data-in=".15" data-out=".42">He set it on the table and waited for it to decide he was worth trusting.</p>
+        <p class="balloon tail-bl" data-in=".45" data-out=".68"><b>Mechanic:</b> “You’re a farm unit. Farm units don’t have sealed buffers.”</p>
+        <p class="caption bl" data-in=".7" data-out=".98">It turned its lens toward the door and said nothing at all.</p>
+      </section>
+      <section class="scene" data-from=".44" data-to=".78">
+        <h3 class="visually-hidden">Scene seven: The Table Wakes</h3>
+        <p class="visually-hidden">Close on the round table. An inset panel shows its emitter waking with a cold blue light. When the transmission plays, a woman in a failing hologram resolves above the table.</p>
+        <figure class="inset" aria-hidden="true" data-in=".08" data-out=".97"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/02-the-message/prop-holotable-1024.webp" alt=""></figure>
+        <p class="caption bl" data-in=".1" data-out=".33">The table woke before he touched it.</p>
+        <p class="caption bl" data-in=".36" data-out=".8">A cold blue thread climbed out of the emitter and waited to be told it was allowed.</p>
+        <button class="play br" type="button" data-reveal aria-expanded="false" aria-controls="tx-07" data-in=".48" data-out=".97">Play the transmission</button>
+        <div class="fragments" id="tx-07" aria-live="polite" data-in="0" data-out=".97">
+          <p class="fragment caption">…signal degraded. Reconstructing.</p>
+          <p class="fragment caption">…if this reaches anyone still listening out here…</p>
+          <p class="fragment caption">…they have taken the archive. What is left of it is on this unit.</p>
+          <p class="fragment balloon balloon--holo"><b>Envoy:</b> “There is no one else. There is only whoever is standing there.”</p>
+        </div>
+      </section>
+      <section class="scene" data-from=".78" data-to="1" data-resolve>
+        <h3 class="visually-hidden">Scene eight: A Route East</h3>
+        <p class="visually-hidden">The hologram of the envoy stands resolved above the table. The camera eases back to take in the room.</p>
+        <p class="caption tl" data-in=".1" data-out=".42">The message ended the way honest pleas end — without a promise that anyone would come.</p>
+        <p class="caption tr" data-in=".45" data-out=".72">Then the light folded into a line of coordinates, and the line pointed east.</p>
+        <p class="balloon tail-bl" data-in=".75" data-out="1"><b>Mechanic:</b> “…that’s eleven hours. In open desert.”</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="act act3" id="act-3" data-range="4"
+  data-cam="t:0 s:1 fx:45 fy:75; t:.24 s:1.3 fx:47 fy:70; t:.48 s:1 fx:50 fy:50; t:.63 s:1.4 fx:55 fy:62; t:.78; t:1 s:1.25 fx:82 fy:36">
+  <div class="act__sticky">
+    <h2 class="visually-hidden">Act III: Into the Dune Sea</h2>
+    <div class="stage" aria-hidden="true"><div class="camera">
+      <div class="layer l-desert" data-depth=".08"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/03-dune-sea/bg-dune-sea-1672.webp" data-srcset="assets/03-dune-sea/bg-dune-sea-1280.webp 1280w, assets/03-dune-sea/bg-dune-sea-1672.webp 1672w" sizes="100vw" alt=""></div>
+      <div class="layer l-raiders" data-depth=".25" data-key="t:0 o:0; t:.8; t:.88 o:1"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/03-dune-sea/char-raiders-1024.webp" alt=""></div>
+      <div class="layer l-skiff" data-depth=".6" data-key="t:0 x:0 y:0 s:1; t:.24; t:.48 x:-5.5 y:-25 s:.43"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/03-dune-sea/veh-skiff-1536.webp" alt=""></div>
+      <div class="layer l-traveler" data-depth=".7" data-key="t:0 x:0 y:0 s:1 o:1; t:.24; t:.48 x:9.75 y:-25 s:.43; t:.5; t:.54 o:0; t:.78; t:.84 o:1"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/03-dune-sea/char-traveler-1024.webp" alt=""></div>
+      <div class="layer l-hermit" data-depth=".55" data-key="t:0 o:0; t:.48; t:.54 o:1; t:.78; t:.83 o:0"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/03-dune-sea/char-hermit-1024.webp" alt=""></div>
+      <div class="layer l-traveler-b" data-depth=".7" data-key="t:0 o:0; t:.5; t:.55 o:1; t:.78; t:.83 o:0"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/03-dune-sea/char-traveler-1024.webp" alt=""></div>
+      <div class="layer l-canyon" data-depth="2.2" data-key="t:0 o:.5; t:.24; t:.32 o:.85; t:.48; t:.56 o:.5"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E" data-src="assets/03-dune-sea/fg-canyon-1672.webp" data-srcset="assets/03-dune-sea/fg-canyon-1280.webp 1280w, assets/03-dune-sea/fg-canyon-1672.webp 1672w" sizes="100vw" alt=""></div>
+    </div></div>
+    <div class="act__ui">
+      <section class="scene" data-from="0" data-to=".24">
+        <h3 class="visually-hidden">Scene nine: Before Light</h3>
+        <p class="visually-hidden">A canyon road at first light. A rust-red hover skiff idles on the sand, and the traveler stands beside it shading his eyes, looking down the canyon.</p>
+        <p class="caption tl" data-in=".18" data-out=".5">He left before either sun, so nobody could talk him out of it.</p>
+        <p class="caption tr" data-in=".55" data-out=".98">He took water, a fusion cutter, and a droid that still would not explain itself.</p>
+      </section>
+      <section class="scene" data-from=".24" data-to=".48">
+        <h3 class="visually-hidden">Scene ten: The Dune Sea Opens</h3>
+        <p class="visually-hidden">The camera pulls back. The skiff and its rider are tiny on the road; the canyon walls frame a vast desert opening beyond.</p>
+        <p class="caption bl" data-in=".2" data-out=".58">The maps stopped agreeing with each other about here.</p>
+        <p class="caption tr" data-in=".62" data-out=".98">Beyond the canyon, the desert stopped being a place he knew.</p>
+      </section>
+      <section class="scene" data-from=".48" data-to=".78">
+        <h3 class="visually-hidden">Scene eleven: The Hermit</h3>
+        <p class="visually-hidden">An old man in a brown robe, leaning on a staff, stands in the middle of the road where it gives out. The traveler faces him.</p>
+        <p class="caption tl" data-in=".18" data-out=".38">Someone was already standing where the road gave out.</p>
+        <p class="balloon tail-br" data-in=".4" data-out=".97"><b>Hermit:</b> “You’re carrying something that doesn’t belong to you.”</p>
+        <button class="play bl" type="button" data-reveal aria-expanded="false" aria-controls="tx-11" data-in=".52" data-out=".97">Show him the message</button>
+        <div class="fragments" id="tx-11" aria-live="polite" data-in="0" data-out=".97">
+          <p class="fragment balloon"><b>Hermit:</b> “Then you already know what it costs. Go on, or turn around. Both are honest.”</p>
+        </div>
+      </section>
+      <section class="scene" data-from=".78" data-to="1">
+        <h3 class="visually-hidden">Scene twelve: Watched</h3>
+        <p class="visually-hidden">Three scouts with spears stand small and high on the ridge, watching. Far below, the skiff and its rider are on the road.</p>
+        <p class="caption tl" data-in=".25" data-out=".5">They had been on the ridge for some time.</p>
+        <p class="caption bl" data-in=".55" data-out=".78">Curiosity had carried him this far. Something heavier would have to carry him the rest of the way.</p>
+        <p class="endcard tc" data-in=".82" data-out="1">End of Part One</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="story.js"></script>
+</body>
+</html>
