@@ -4,9 +4,11 @@ export type SceneLayer = {
   depth: number;
   priority?: boolean;
   sizes?: string;
+  /** Only painted once this reveal has been triggered on the page. */
+  reveal?: string;
 };
 
-export const sceneLayers: SceneLayer[] = [
+const outerWaste: SceneLayer[] = [
   { id: "sky", src: "/assets/tatooine/sky.png", depth: 0.1, priority: true, sizes: "100vw" },
   { id: "suns", src: "/assets/tatooine/twin-suns.png", depth: 0.24, priority: true, sizes: "46vw" },
   { id: "far", src: "/assets/tatooine/far-mountains.png", depth: 0.44, sizes: "112vw" },
@@ -19,6 +21,47 @@ export const sceneLayers: SceneLayer[] = [
   { id: "right", src: "/assets/tatooine/foreground-right.png", depth: 2.45, sizes: "60vw" },
   { id: "center", src: "/assets/tatooine/foreground-center.png", depth: 2.9, sizes: "80vw" },
 ];
+
+const homestead: SceneLayer[] = [
+  {
+    id: "hs-room",
+    src: "/assets/tatooine/chapter-02-message/homestead-interior-master.png",
+    depth: 0.16,
+    sizes: "100vw",
+  },
+  {
+    id: "hs-droid",
+    src: "/assets/tatooine/chapter-02-message/utility-droid.png",
+    depth: 1.05,
+    sizes: "22vw",
+  },
+  {
+    id: "hs-mechanic",
+    src: "/assets/tatooine/chapter-02-message/farm-mechanic.png",
+    depth: 1.25,
+    sizes: "28vw",
+  },
+  {
+    id: "hs-envoy",
+    src: "/assets/tatooine/chapter-02-message/rebel-envoy-hologram.png",
+    depth: 0.95,
+    sizes: "24vw",
+    reveal: "transmission",
+  },
+  {
+    id: "hs-arch",
+    src: "/assets/tatooine/chapter-02-message/foreground-arch.png",
+    depth: 2.6,
+    sizes: "110vw",
+  },
+];
+
+export const scenes: Record<string, SceneLayer[]> = {
+  "outer-waste": outerWaste,
+  homestead,
+};
+
+export const sceneIds = Object.keys(scenes);
 
 export type Hotspot = {
   id: string;
@@ -39,8 +82,17 @@ export type Camera = {
 /** [r, g, b, a] so the grade can be interpolated between pages. */
 export type Tint = [number, number, number, number];
 
+export type Transmission = {
+  /** Label on the control that starts the playback. */
+  action: string;
+  /** Revealed one at a time as the signal resolves. */
+  fragments: string[];
+  closing: string;
+};
+
 export type StoryPage = {
   id: string;
+  scene: string;
   numeral: string;
   chapter: string;
   kicker: string;
@@ -53,11 +105,13 @@ export type StoryPage = {
   mist: number;
   bloom: number;
   hotspots: Hotspot[];
+  transmission?: Transmission;
 };
 
 export const storyPages: StoryPage[] = [
   {
     id: "arrival",
+    scene: "outer-waste",
     numeral: "I",
     chapter: "The Waiting World",
     kicker: "Outer Rim Territories · Arkanis sector",
@@ -85,10 +139,11 @@ export const storyPages: StoryPage[] = [
     ],
   },
   {
-    id: "homestead",
+    id: "vaporators",
+    scene: "outer-waste",
     numeral: "II",
     chapter: "The Long Way Home",
-    kicker: "Chapter II",
+    kicker: "Chapter One",
     title: "He knew every machine on the farm.",
     body: "Luke Skywalker repaired vaporators, chased another harvest, and watched ships become silver scratches in the high blue sky. He was useful here. He was loved here. Part of him was always somewhere else.",
     align: "left",
@@ -114,9 +169,10 @@ export const storyPages: StoryPage[] = [
   },
   {
     id: "promise",
+    scene: "outer-waste",
     numeral: "III",
     chapter: "The Promise",
-    kicker: "Chapter III",
+    kicker: "Chapter One",
     title: "The suns always set together. Luke watched alone.",
     body: "He promised himself there would be another season, another chance to leave. But wait long enough and the life you postponed quietly becomes the only life you know.",
     quote: "Somewhere beyond the ridge, the future was already looking for him.",
@@ -143,9 +199,10 @@ export const storyPages: StoryPage[] = [
   },
   {
     id: "signal",
+    scene: "outer-waste",
     numeral: "IV",
     chapter: "A Voice in the Dust",
-    kicker: "Chapter IV",
+    kicker: "Chapter One",
     title: "An old droid carried a message meant for someone else.",
     body: "It was incomplete and frightened — a stranger asking for help. Luke could have looked away. Instead he leaned closer. Great journeys sometimes begin with the simple decision to listen.",
     align: "center",
@@ -171,9 +228,10 @@ export const storyPages: StoryPage[] = [
   },
   {
     id: "departure",
+    scene: "outer-waste",
     numeral: "V",
     chapter: "Beyond the Ridge",
-    kicker: "Chapter V",
+    kicker: "Chapter One",
     title: "Some journeys begin with courage. His began with curiosity.",
     body: "To understand why Luke leaves, remember what asked him to stay: a home sturdy enough to dream from, and precious enough to make the leaving hurt.",
     align: "center",
@@ -182,5 +240,117 @@ export const storyPages: StoryPage[] = [
     mist: 0.42,
     bloom: 0.4,
     hotspots: [],
+  },
+  {
+    id: "threshold",
+    scene: "homestead",
+    numeral: "VI",
+    chapter: "Out of the Heat",
+    kicker: "Chapter Two",
+    title: "Inside, the day gave up at the door.",
+    body: "Thick walls, cool air, and the particular quiet of a room built to outlast weather. He set the droid down where the light was best and let the sand fall off both of them.",
+    align: "left",
+    camera: { scale: 1.05, x: 0, y: 0 },
+    tint: [26, 14, 12, 0.18],
+    mist: 0.12,
+    bloom: 0.3,
+    hotspots: [
+      {
+        id: "arch-window",
+        x: 68,
+        y: 34,
+        label: "The far window",
+        title: "The desert, kept at arm's length",
+        body: "A single opening onto the waste, angled so the suns never fall directly on the table. The room was built by someone who intended to stay.",
+        facts: [
+          ["Aspect", "West"],
+          ["Glass", "None"],
+          ["Purpose", "Air, not view"],
+        ],
+      },
+    ],
+  },
+  {
+    id: "trust",
+    scene: "homestead",
+    numeral: "VII",
+    chapter: "What the Droid Carried",
+    kicker: "Chapter Two",
+    title: "He waited for it to decide he was worth trusting.",
+    body: "The droid had been somewhere it would not talk about. Its casing was scored, its charge was low, and it kept turning its lens toward the table as though checking that the room was empty.",
+    align: "left",
+    camera: { scale: 1.3, x: -2, y: -6 },
+    tint: [30, 16, 14, 0.2],
+    mist: 0.1,
+    bloom: 0.24,
+    hotspots: [
+      {
+        id: "droid",
+        x: 67,
+        y: 72,
+        label: "Utility unit",
+        title: "Older than its owner, ruder than both",
+        body: "A farm droid with a courier's memory buffer, which is not a combination anyone builds on purpose. Whatever it is carrying, it was not carrying it for him.",
+        facts: [
+          ["Charge", "11%"],
+          ["Buffer", "Sealed"],
+          ["Origin", "Refuses"],
+        ],
+      },
+    ],
+  },
+  {
+    id: "table",
+    scene: "homestead",
+    numeral: "VIII",
+    chapter: "The Table Wakes",
+    kicker: "Chapter Two",
+    title: "The table woke before he touched it.",
+    body: "A cold blue thread climbed out of the emitter and hung there, waiting to be told it was allowed. Some part of him already knew that playing it would cost him the evening, and then rather more than the evening.",
+    align: "left",
+    camera: { scale: 1.5, x: -1, y: -8 },
+    tint: [18, 14, 26, 0.26],
+    mist: 0.14,
+    bloom: 0.18,
+    hotspots: [],
+    transmission: {
+      action: "Play the transmission",
+      fragments: [
+        "…signal degraded. Reconstructing.",
+        "…if this reaches anyone still listening in the Outer Rim…",
+        "…they have taken the archive. What is left of it is on this unit.",
+      ],
+      closing: "There is no one else. There is only whoever is standing there.",
+    },
+  },
+  {
+    id: "envoy",
+    scene: "homestead",
+    numeral: "IX",
+    chapter: "A Route Into the Waste",
+    kicker: "Chapter Two",
+    title: "She was not speaking to him. He listened anyway.",
+    body: "The message ended the way all honest pleas end — without a promise that anyone would come. Then the light folded itself into a line of coordinates, and the line pointed east, into the dune sea.",
+    quote: "Curiosity had brought him this far. Something heavier would have to carry him the rest of the way.",
+    align: "right",
+    camera: { scale: 1.2, x: 8, y: -2 },
+    tint: [22, 15, 24, 0.24],
+    mist: 0.2,
+    bloom: 0.42,
+    hotspots: [
+      {
+        id: "route",
+        x: 50,
+        y: 66,
+        label: "Plotted route",
+        title: "East, past the last marker",
+        body: "Eleven hours by skiff if the weather holds, and the weather does not hold. Beyond the canyon the maps stop agreeing with each other.",
+        facts: [
+          ["Bearing", "084°"],
+          ["Distance", "310 km"],
+          ["Escort", "None"],
+        ],
+      },
+    ],
   },
 ];

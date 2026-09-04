@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-import { sceneLayers, storyPages, type Hotspot } from "@/data/story";
+import { scenes, storyPages, type Hotspot } from "@/data/story";
 
 const WHEEL_THRESHOLD = 64;
 const WHEEL_IDLE_MS = 170;
@@ -16,7 +16,9 @@ const reduced = () =>
 
 export function TatooineExperience() {
   const frameRef = useRef<HTMLDivElement>(null);
-  const sceneCamRef = useRef<HTMLDivElement>(null);
+  const stageRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const camRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const spotStageRef = useRef<HTMLDivElement>(null);
   const spotCamRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const pageRefs = useRef<(HTMLElement | null)[]>([]);
@@ -41,15 +43,21 @@ export function TatooineExperience() {
 
   const [index, setIndex] = useState(0);
   const [note, setNote] = useState<Hotspot | null>(null);
+  const [transmitted, setTransmitted] = useState(false);
+  const [fragment, setFragment] = useState(-1);
 
   const page = storyPages[index];
   const last = storyPages.length - 1;
+  const activeScene = page.scene;
+  // Reaching the envoy page without playing the message still has to show her.
+  const envoyVisible = transmitted || page.id === "envoy";
 
   const goTo = useCallback((next: number) => {
     setIndex((current) => {
       const clamped = Math.max(0, Math.min(storyPages.length - 1, next));
       if (clamped === current) return current;
       setNote(null);
+      setFragment(-1);
       return clamped;
     });
   }, []);
@@ -61,7 +69,10 @@ export function TatooineExperience() {
       lockedUntil.current = now + TURN_COOLDOWN_MS;
       setIndex((current) => {
         const next = Math.max(0, Math.min(storyPages.length - 1, current + direction));
-        if (next !== current) setNote(null);
+        if (next !== current) {
+          setNote(null);
+          setFragment(-1);
+        }
         return next;
       });
     },
@@ -83,7 +94,18 @@ export function TatooineExperience() {
     // cannot leave a half-played intro's autoAlpha baked into the DOM.
     const ctx = gsap.context(() => {
       const first = storyPages[0];
-      gsap.set([sceneCamRef.current, spotCamRef.current], {
+      Object.entries(stageRefs.current).forEach(([id, el]) => {
+        if (!el) return;
+        gsap.set(el, { autoAlpha: id === first.scene ? 1 : 0 });
+        const opening = storyPages.find((entry) => entry.scene === id) ?? first;
+        gsap.set(camRefs.current[id] ?? null, {
+          scale: opening.camera.scale,
+          xPercent: opening.camera.x * opening.camera.scale,
+          yPercent: opening.camera.y * opening.camera.scale,
+          force3D: true,
+        });
+      });
+      gsap.set(spotCamRef.current, {
         scale: first.camera.scale,
         xPercent: first.camera.x * first.camera.scale,
         yPercent: first.camera.y * first.camera.scale,
@@ -140,17 +162,41 @@ export function TatooineExperience() {
     const tl = gsap.timeline({ defaults: { overwrite: "auto", force3D: true } });
 
     {
-      tl.to(
-        [sceneCamRef.current, spotCamRef.current],
-        {
-          scale: next.camera.scale,
-          xPercent: next.camera.x * next.camera.scale,
-          yPercent: next.camera.y * next.camera.scale,
-          duration: slow ? 0 : 1.35,
-          ease: "power2.inOut",
-        },
-        0,
-      );
+      const previous = storyPages[from];
+      const camera = {
+        scale: next.camera.scale,
+        xPercent: next.camera.x * next.camera.scale,
+        yPercent: next.camera.y * next.camera.scale,
+      };
+      const cam = camRefs.current[next.scene] ?? null;
+
+      if (previous.scene !== next.scene) {
+        // A different room, not a different corner of the same one: retreat the
+        // old scene and let the new one settle in from slightly too wide.
+        tl.to(
+          stageRefs.current[previous.scene] ?? null,
+          { autoAlpha: 0, duration: slow ? 0 : 0.65, ease: "power2.inOut" },
+          0,
+        );
+        gsap.set(cam, { ...camera, scale: camera.scale * 1.1 });
+        tl.to(
+          stageRefs.current[next.scene] ?? null,
+          { autoAlpha: 1, duration: slow ? 0 : 0.85, ease: "power2.out" },
+          slow ? 0 : 0.2,
+        );
+        tl.to(cam, { ...camera, duration: slow ? 0 : 1.6, ease: "power2.out" }, slow ? 0 : 0.2);
+        tl.set(spotCamRef.current, camera, slow ? 0 : 0.45);
+      } else {
+        tl.to(
+          [cam, spotCamRef.current],
+          { ...camera, duration: slow ? 0 : 1.35, ease: "power2.inOut" },
+          0,
+        );
+      }
+
+      // Markers belong to a page, so they never cross a turn on screen.
+      tl.to(spotStageRef.current, { autoAlpha: 0, duration: slow ? 0 : 0.28 }, 0);
+      tl.to(spotStageRef.current, { autoAlpha: 1, duration: slow ? 0 : 0.5 }, slow ? 0 : 0.55);
 
       tl.to(
         grade.current,
@@ -295,7 +341,10 @@ export function TatooineExperience() {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     if (reduced()) return;
 
-    const layers = Array.from(frame.querySelectorAll<HTMLElement>("[data-depth]"));
+    const active = stageRefs.current[activeScene];
+    const layers = Array.from(
+      (active ?? frame).querySelectorAll<HTMLElement>("[data-depth]"),
+    );
     const movers = layers.map((layer) => ({
       depth: Number(layer.dataset.depth ?? 1),
       x: gsap.quickTo(layer, "x", { duration: 0.9, ease: "power2.out" }),
@@ -345,7 +394,41 @@ export function TatooineExperience() {
       if (queued) cancelAnimationFrame(queued);
       gsap.killTweensOf(layers);
     };
-  }, []);
+  }, [activeScene]);
+
+  useEffect(() => {
+    const el = frameRef.current?.querySelector<HTMLElement>('[data-layer="hs-envoy"]');
+    if (!el) return;
+    if (!envoyVisible) {
+      gsap.set(el, { autoAlpha: 0 });
+      return;
+    }
+    gsap.fromTo(
+      el,
+      { autoAlpha: 0, scaleY: reduced() ? 1 : 0.82, transformOrigin: "50% 100%" },
+      { autoAlpha: 0.92, scaleY: 1, duration: reduced() ? 0 : 1.1, ease: "power2.out" },
+    );
+  }, [envoyVisible]);
+
+  const playTransmission = useCallback(() => {
+    const lines = page.transmission?.fragments ?? [];
+    setTransmitted(true);
+    setFragment(0);
+    if (reduced()) {
+      setFragment(lines.length);
+      return;
+    }
+    const tl = gsap.timeline();
+    const el = frameRef.current?.querySelector<HTMLElement>('[data-layer="hs-envoy"]');
+    if (el) {
+      // signal interference before the figure resolves
+      tl.to(el, { autoAlpha: 0.34, duration: 0.07, repeat: 7, yoyo: true, ease: "none" }, 0.35);
+      tl.to(el, { autoAlpha: 0.92, duration: 0.5, ease: "power2.out" }, 1.2);
+    }
+    lines.forEach((_, i) => {
+      tl.call(() => setFragment(i + 1), undefined, 1.1 + i * 1.9);
+    });
+  }, [page.transmission]);
 
   useEffect(() => {
     if (!note) return;
@@ -361,28 +444,52 @@ export function TatooineExperience() {
   return (
     <main className="book">
       <div ref={frameRef} className="frame">
-        <div className="stage" aria-hidden="true">
-          <div ref={sceneCamRef} className="camera">
-            <div className="scene">
-              {sceneLayers.map((layer) =>
-                layer.src ? (
-                  <div key={layer.id} className={`layer layer--${layer.id}`} data-depth={layer.depth}>
-                    <Image
-                      src={layer.src}
-                      alt=""
-                      fill
-                      priority={layer.priority}
-                      sizes={layer.sizes ?? "100vw"}
-                      draggable={false}
+        {Object.entries(scenes).map(([sceneId, layers]) => (
+          <div
+            key={sceneId}
+            className="stage"
+            aria-hidden="true"
+            ref={(el) => {
+              stageRefs.current[sceneId] = el;
+            }}
+          >
+            <div
+              className="camera"
+              ref={(el) => {
+                camRefs.current[sceneId] = el;
+              }}
+            >
+              <div className="scene">
+                {layers.map((layer) =>
+                  layer.src ? (
+                    <div
+                      key={layer.id}
+                      className={`layer layer--${layer.id}`}
+                      data-depth={layer.depth}
+                      data-layer={layer.id}
+                    >
+                      <Image
+                        src={layer.src}
+                        alt=""
+                        fill
+                        priority={layer.priority}
+                        sizes={layer.sizes ?? "100vw"}
+                        draggable={false}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      key={layer.id}
+                      className={`layer layer--${layer.id}`}
+                      data-depth={layer.depth}
+                      data-layer={layer.id}
                     />
-                  </div>
-                ) : (
-                  <div key={layer.id} className={`layer layer--${layer.id}`} data-depth={layer.depth} />
-                ),
-              )}
+                  ),
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        ))}
 
         <div className="bloom" aria-hidden="true" />
         <div className="tint" aria-hidden="true" />
@@ -437,12 +544,38 @@ export function TatooineExperience() {
                 <h1 className="page__title">{entry.title}</h1>
                 <p className="page__body">{entry.body}</p>
                 {entry.quote && <blockquote className="page__quote">{entry.quote}</blockquote>}
+                {entry.transmission && (
+                  <div className="signal">
+                    <button
+                      className="signal__play"
+                      type="button"
+                      onClick={playTransmission}
+                      disabled={fragment >= 0}
+                    >
+                      <span className="signal__wave" aria-hidden="true">
+                        <i />
+                        <i />
+                        <i />
+                        <i />
+                      </span>
+                      {fragment < 0 ? entry.transmission.action : "Receiving"}
+                    </button>
+                    <ol className="signal__log" aria-live="polite">
+                      {entry.transmission.fragments.slice(0, Math.max(fragment, 0)).map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ol>
+                    {fragment > entry.transmission.fragments.length - 1 && fragment > 0 && (
+                      <p className="signal__closing">{entry.transmission.closing}</p>
+                    )}
+                  </div>
+                )}
               </div>
             </article>
           ))}
         </div>
 
-        <div className="stage stage--spots" >
+        <div className="stage stage--spots" ref={spotStageRef}>
           <div ref={spotCamRef} className="camera">
             <div className="hotspots">
               {page.hotspots.map((hotspot) => (
