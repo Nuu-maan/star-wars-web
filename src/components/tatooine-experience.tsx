@@ -1,16 +1,32 @@
 "use client";
 
 import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 
 import { sceneLayers, storyPages } from "@/data/story";
 
 export function TatooineExperience() {
-  const index = 0;
+  const [index, setIndex] = useState(0);
+  const [ready, setReady] = useState(false);
 
   const page = storyPages[index];
+  const last = storyPages.length - 1;
+
+  const goTo = useCallback((next: number) => {
+    const clamped = Math.max(0, Math.min(storyPages.length - 1, next));
+    setIndex((current) => {
+      if (clamped === current) return current;
+      return clamped;
+    });
+  }, []);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setReady(true), 80);
+    return () => window.clearTimeout(id);
+  }, []);
 
   return (
-    <main className="book">
+    <main className="book" data-ready={ready}>
       <div
         className="frame"
         style={
@@ -89,6 +105,44 @@ export function TatooineExperience() {
             </article>
           ))}
         </div>
+
+        <nav className="chrome chrome--bottom" aria-label="Story pages">
+          <button
+            className="turn"
+            type="button"
+            aria-label="Previous page"
+            disabled={index === 0}
+            onClick={() => goTo(index - 1)}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+
+          <ol className="ticks">
+            {storyPages.map((entry, entryIndex) => (
+              <li key={entry.id}>
+                <button
+                  type="button"
+                  className={entryIndex === index ? "tick tick--active" : "tick"}
+                  aria-current={entryIndex === index ? "step" : undefined}
+                  onClick={() => goTo(entryIndex)}
+                >
+                  <span className="tick__numeral">{entry.numeral}</span>
+                  <span className="visually-hidden">{entry.chapter}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+
+          <button
+            className="turn"
+            type="button"
+            aria-label="Next page"
+            disabled={index === last}
+            onClick={() => goTo(index + 1)}
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </nav>
       </div>
     </main>
   );
