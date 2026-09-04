@@ -166,4 +166,18 @@ export const storyPages: StoryPage[] = [
       },
     ],
   },
+  {
+    id: "departure",
+    numeral: "V",
+    chapter: "Beyond the Ridge",
+    kicker: "Chapter V",
+    title: "Some journeys begin with courage. His began with curiosity.",
+    body: "To understand why Luke leaves, remember what asked him to stay: a home sturdy enough to dream from, and precious enough to make the leaving hurt.",
+    align: "center",
+    camera: { scale: 1, x: 0, y: -3 },
+    tint: "rgba(20, 10, 14, 0.3)",
+    mist: 0.42,
+    bloom: 0.4,
+    hotspots: [],
+  },
 ];
