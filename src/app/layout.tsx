@@ -18,7 +18,10 @@ const ui = Inter({
 export const metadata: Metadata = {
   title: "Tatooine — Galactic Archive",
   description:
-    "An illustrated, interactive journey across the desert world of Tatooine.",
+    "An illustrated, interactive storybook of the desert world of Tatooine.",
+  openGraph: {
+    images: ["/assets/tatooine/master-panorama.png"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
