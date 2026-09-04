@@ -75,7 +75,9 @@ button {
 .frame {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  /* clip, not hidden: `hidden` leaves a programmatically scrollable box, and a
+     focus or scrollIntoView on a hotspot shifts the whole composition. */
+  overflow: clip;
   border-radius: var(--radius);
   background: #120c10;
   box-shadow:
