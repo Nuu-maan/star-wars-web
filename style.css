@@ -57,6 +57,7 @@ main { position: relative; }
 }
 .act2 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
 .act3 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
+.act4 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
 
 .act__sticky {
   position: sticky;
@@ -198,6 +199,22 @@ main { position: relative; }
 /* scouts sit on the left shoulder of the cliff so the end-frame keeps all three */
 .l-raiders { width: 9%; left: 82%; bottom: 73.5%; aspect-ratio: 1536 / 1024; } /* x8–98 y1–100, anchor 0; cliff top runs (82%,27%)→(100%,23%) */
 
+/* act IV · 04-mos-eisley */
+
+.act4 { --ratio: 1672 / 941; }
+
+.l-port { inset: 0; }
+.l-port > img { object-fit: cover; }
+
+.l-signs { inset: 0; }
+.l-signs > img { object-fit: cover; object-position: 50% 30%; }
+
+.l-stall { width: 32%; left: 58%; bottom: -3%; aspect-ratio: 1536 / 1024; } /* x5–96 y1–96 */
+.l-stall > img { transition: filter .9s; }
+.act4.is-played .l-stall > img { filter: drop-shadow(0 0 22px rgba(255, 170, 60, .75)) brightness(1.08); }
+
+.l-dusk { inset: 0; background: linear-gradient(to bottom, rgba(16, 8, 30, .95), rgba(16, 8, 30, .3) 55%, rgba(16, 8, 30, .85)); opacity: 0; }
+
 /* ============================================================================
    lettering — captions, balloons, sound effects, controls
    ========================================================================= */
@@ -279,6 +296,7 @@ main { position: relative; }
 :where(.act2 .scene:nth-child(2)) .balloon { left: 22%; top: 22%; }
 :where(.act2 .scene:nth-child(4)) .balloon { left: 26%; top: 18%; }
 :where(.act3 .scene:nth-child(3)) .balloon { left: 44%; top: 6%; }
+:where(.act4 .scene:nth-child(2)) .balloon { left: 8%; top: 42%; }
 
 /* a voice from off-panel: dashed outline, no tail, a lighter shadow */
 .balloon--off { border-style: dashed; filter: drop-shadow(4px 5px 0 rgba(22, 16, 11, .3)); }
@@ -309,6 +327,7 @@ main { position: relative; }
 }
 .sfx--far { left: 30%; top: 43%; rotate: -6deg; font-size: clamp(22px, 2.9vw, 46px); opacity: .95; }
 .sfx--holo { left: 38%; top: 52%; rotate: -4deg; color: var(--holo); font-size: clamp(20px, 2.4vw, 38px); }
+.sfx--engine { left: 24%; top: 58%; rotate: -3deg; color: var(--glow); }
 
 /* poster titles */
 .title, .endcard, .loader__title {
@@ -393,6 +412,18 @@ main { position: relative; }
   letter-spacing: .04em;
   text-transform: uppercase;
   font-size: clamp(13px, 1.15vw, 17px);
+}
+
+/* a memory is paper, not a readout */
+.fragment.caption--memory {
+  background-color: var(--paper);
+  background-image: var(--halftone);
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 6px 7px 0 var(--ink), inset 0 0 0 2px rgba(255, 255, 255, .35);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: clamp(15px, 1.45vw, 21px);
 }
 
 /* ============================================================================
@@ -535,7 +566,9 @@ main { position: relative; }
   .auto { font-size: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .auto button { padding-inline: .6em; }
   .act1 { --ratio: 1 / 1; }
-  .act2, .act3 { --ratio: 5 / 4; }
+  .act2, .act3, .act4 { --ratio: 5 / 4; }
+  .l-stall { width: 48%; left: 48%; }
+  .sfx--engine { left: 8%; top: 56%; }
   .l-settlement { left: 20%; }
   .l-mechanic { left: 26%; }
   .l-raiders { width: 8%; left: 52%; bottom: 44%; }
