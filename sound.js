@@ -57,8 +57,8 @@ function boot() {
 function tick() {
   const t = ctx.currentTime;
   const boost = window.lenis ? gsap.utils.clamp(0, 1, Math.abs(lenis.velocity) / 60) : 0;
-  windGain.gain.setTargetAtTime(target.wind * (1 + boost), t, .3);
-  windFilter.frequency.setTargetAtTime(target.cutoff * (1 + 1.5 * boost), t, .3);
+  windGain.gain.setTargetAtTime(target.wind * (1 + .5 * boost), t, .5);
+  windFilter.frequency.setTargetAtTime(target.cutoff * (1 + boost), t, .5);
   humGain.gain.setTargetAtTime(target.hum, t, .3);
   engineGain.gain.setTargetAtTime(target.engine, t, .15);
   engineFilter.frequency.setTargetAtTime(200 + 700 * target.engineTone, t, .15);
@@ -99,7 +99,7 @@ function setSound(on) {
   try { localStorage.sound = on ? '1' : ''; } catch {}
   if (!ctx) { if (!on) return; boot(); }
   if (on) ctx.resume();
-  master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, .4);
+  master.gain.setTargetAtTime(on ? .3 : 0, ctx.currentTime, .6);
 }
 
 if (!soundRoot.classList.contains('static')) {
