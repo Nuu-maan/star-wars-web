@@ -210,7 +210,7 @@ main { position: relative; }
 .bl { left: 6%; bottom: 10%; }
 .br { right: 6%; bottom: 10%; }
 .tc { left: 50%; top: 10%; translate: -50% 0; }
-.bc { left: 50%; bottom: 9%; translate: -50% 0; }
+.bc { left: 50%; bottom: max(9%, 88px); translate: -50% 0; }
 
 /* narration box: newsprint paper, hard ink rule, hand-placed tilt */
 .caption {
@@ -428,6 +428,49 @@ main { position: relative; }
 .skip:hover { background: var(--paper); color: var(--ink); }
 :root:not(.js) .skip, .static .skip { display: none; }
 
+.auto {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: var(--ink);
+  border: 2px solid var(--paper);
+  border-radius: 999px;
+  font: 400 14px/1.4 var(--comic);
+  letter-spacing: .06em;
+  white-space: nowrap;
+  opacity: 0;
+  translate: -50% 14px;
+  transition: opacity .35s, translate .35s;
+}
+.is-ready .auto { opacity: 1; translate: -50% 0; }
+.auto button {
+  appearance: none;
+  border: 0;
+  padding: .35em .8em .28em;
+  border-radius: 999px;
+  background: none;
+  color: var(--paper);
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition: background-color .15s, color .15s;
+}
+.auto button:focus-visible { outline: 2px solid var(--saber); outline-offset: 2px; }
+.auto__play { display: flex; align-items: center; gap: .45em; background: var(--paper); color: var(--ink); }
+.auto__play:hover { background: var(--saber); }
+.auto__play svg { width: 11px; height: 11px; fill: currentColor; }
+.auto__play .ico-pause, .auto__play.is-playing .ico-play { display: none; }
+.auto__play.is-playing .ico-pause { display: block; }
+.auto__speeds { display: flex; gap: 2px; margin-left: 4px; padding-left: 6px; border-left: 2px solid rgba(255, 255, 255, .18); }
+.auto__speeds button:hover { background: rgba(255, 255, 255, .12); }
+.auto__speeds [aria-pressed="true"] { background: var(--saber); color: var(--ink); }
+:root:not(.js) .auto, .static .auto { display: none; }
+
 #progress {
   position: fixed;
   left: 0; right: 0; bottom: 0;
@@ -468,6 +511,8 @@ main { position: relative; }
    ========================================================================= */
 
 @media (max-width: 700px) {
+  .auto { font-size: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .auto button { padding-inline: .6em; }
   .act1 { --ratio: 1 / 1; }
   .act2, .act3 { --ratio: 5 / 4; }
   .l-settlement { left: 20%; }

@@ -19,6 +19,18 @@
 
 <div id="frame" aria-hidden="true"></div>
 <button class="skip" type="button">Skip the animation</button>
+<div class="auto" role="group" aria-label="Autoscroll">
+  <button class="auto__play" type="button" aria-pressed="false">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="ico-play" d="M4 2.5v11l9-5.5z"/><path class="ico-pause" d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z"/></svg>
+    <span>Play</span>
+  </button>
+  <div class="auto__speeds">
+    <button type="button" data-speed=".5" aria-pressed="false">0.5×</button>
+    <button type="button" data-speed="1" aria-pressed="true">1×</button>
+    <button type="button" data-speed="1.5" aria-pressed="false">1.5×</button>
+    <button type="button" data-speed="2" aria-pressed="false">2×</button>
+  </div>
+</div>
 
 <div id="loader" aria-hidden="true">
   <p class="loader__eyebrow">A scroll-driven comic</p>
