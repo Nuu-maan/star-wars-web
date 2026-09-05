@@ -8,6 +8,13 @@ const DIP = .04;
 const isStatic = matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (isStatic) root.classList.add('static');
 
+const lenis = isStatic ? null : new Lenis({ autoRaf: false });
+if (lenis) {
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+
 /* ---------------------------------------------------------------- keyframes */
 
 function parseKeys(s) {
@@ -230,6 +237,7 @@ document.querySelector('.skip').addEventListener('click', () => {
   gsap.set('.camera, .layer, .holo, .stage, .act__sticky, [data-in]', { clearProps: 'all' });
   acts.forEach(preload);
   acts.forEach(act => reveal(act, 'instant'));
+  lenis?.destroy();
   scrollTo(0, 0);
 });
 
