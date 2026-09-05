@@ -237,9 +237,39 @@ document.querySelector('.skip').addEventListener('click', () => {
   gsap.set('.camera, .layer, .holo, .stage, .act__sticky, [data-in]', { clearProps: 'all' });
   acts.forEach(preload);
   acts.forEach(act => reveal(act, 'instant'));
+  setAuto(false);
   lenis?.destroy();
   scrollTo(0, 0);
 });
+
+/* -------------------------------------------------------------- autoscroll */
+
+const auto = { on: false, speed: 1 };
+const playBtn = document.querySelector('.auto__play');
+const speedBtns = [...document.querySelectorAll('[data-speed]')];
+
+function setAuto(on) {
+  auto.on = on;
+  playBtn.classList.toggle('is-playing', on);
+  playBtn.setAttribute('aria-pressed', on);
+  playBtn.lastElementChild.textContent = on ? 'Pause' : 'Play';
+}
+playBtn.addEventListener('click', () => setAuto(!auto.on));
+speedBtns.forEach(btn => btn.addEventListener('click', () => {
+  speedBtns.forEach(b => b.setAttribute('aria-pressed', b === btn));
+  auto.speed = +btn.dataset.speed;
+  if (!auto.on) setAuto(true);
+}));
+
+if (lenis) {
+  gsap.ticker.add((t, dt) => {
+    if (!auto.on) return;
+    const y = Math.min(lenis.limit, lenis.targetScroll + innerHeight / 6 * auto.speed * dt / 1000);
+    lenis.scrollTo(y, { immediate: true });
+    if (y >= lenis.limit) setAuto(false);
+  });
+  lenis.on('virtual-scroll', () => auto.on && setAuto(false));
+}
 
 /* -------------------------------------------------------------------- boot */
 
