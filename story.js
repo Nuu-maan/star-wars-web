@@ -140,6 +140,7 @@ function build(act, i) {
       tl.call(() => reveal(act, at ? 'fast' : 'instant'), [], from + span * at);
     }
   });
+  if (act.dataset.shake) tl.call(shake, [act.querySelector('.camera')], +act.dataset.shake);
   if (i) tl.fromTo(view, { opacity: 0 }, { opacity: 1, duration: DIP }, 0);
   if (i < acts.length - 1) tl.to(view, { opacity: 0, duration: DIP, immediateRender: false }, 1 - DIP);
   tl.set({}, {}, 1);
@@ -160,6 +161,10 @@ function build(act, i) {
   });
 
 }
+
+// the cabin rattles when the drive lights; x is free, the camera keyframes own xPercent
+const shake = camera =>
+  gsap.to(camera, { keyframes: [{ x: -7 }, { x: 7 }, { x: -5 }, { x: 5 }, { x: -2 }, { x: 0 }], duration: .45, ease: 'none' });
 
 /* -------------------------------------------------------------- transmission */
 
