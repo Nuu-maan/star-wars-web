@@ -6,6 +6,9 @@ const BEDS = [
   { wind: .9, cutoff: 900, hum: 0 },
   { wind: .35, cutoff: 500, hum: .08 },
   { wind: 1, cutoff: 1300, hum: 0 },
+  { wind: .45, cutoff: 700, hum: .07 },
+  { wind: .12, cutoff: 300, hum: .14 },
+  { wind: 1, cutoff: 1600, hum: 0 },
 ];
 const target = { wind: 0, cutoff: 400, hum: 0, engine: 0, engineTone: 0 };
 
@@ -111,16 +114,21 @@ if (!soundRoot.classList.contains('static')) {
       target.wind = BEDS[i].wind * edge;
       target.cutoff = BEDS[i].cutoff;
       target.hum = BEDS[i].hum * edge;
-      if (i === 2) {
-        target.engineTone = p < .48 ? Math.sin(Math.PI * p / .48) : 0;
-        target.engine = .18 * target.engineTone;
-      }
+      target.engineTone = i === 2 ? (p < .48 ? Math.sin(Math.PI * p / .48) : 0)
+        : i === 4 ? clamp(0, 1, (p - .6) / .35) * edge : 0;
+      target.engine = (i === 4 ? .24 : .18) * target.engineTone;
+      if (i === 4) target.wind += .8 * clamp(0, 1, (p - .85) / .12) * edge;
     },
   }));
   Object.assign(target, BEDS[0]);
 
-  new MutationObserver(() => ctx && soundOn() && acts[1].classList.contains('is-played') && holo())
-    .observe(acts[1], { attributeFilter: ['class'] });
+  [acts[1], acts[5]].forEach(act => {
+    new MutationObserver(() => {
+      if (!act.classList.contains('is-played') || act.dataset.sounded) return;
+      act.dataset.sounded = 1;
+      ctx && soundOn() && holo();
+    }).observe(act, { attributeFilter: ['class'] });
+  });
 
   document.querySelector('.auto').addEventListener('click', e => {
     if (ctx && soundOn() && e.target.closest('button') && !e.target.closest('.auto__sound')) click();

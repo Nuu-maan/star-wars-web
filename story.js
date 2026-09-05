@@ -140,6 +140,7 @@ function build(act, i) {
       tl.call(() => reveal(act, at ? 'fast' : 'instant'), [], from + span * at);
     }
   });
+  if (act.dataset.shake) tl.call(shake, [act.querySelector('.camera')], +act.dataset.shake);
   if (i) tl.fromTo(view, { opacity: 0 }, { opacity: 1, duration: DIP }, 0);
   if (i < acts.length - 1) tl.to(view, { opacity: 0, duration: DIP, immediateRender: false }, 1 - DIP);
   tl.set({}, {}, 1);
@@ -160,6 +161,10 @@ function build(act, i) {
   });
 
 }
+
+// the cabin rattles when the drive lights; x is free, the camera keyframes own xPercent
+const shake = camera =>
+  gsap.to(camera, { keyframes: [{ x: -7 }, { x: 7 }, { x: -5 }, { x: 5 }, { x: -2 }, { x: 0 }], duration: .45, ease: 'none' });
 
 /* -------------------------------------------------------------- transmission */
 
@@ -207,7 +212,7 @@ function ambient() {
   gsap.fromTo('#progress', { scaleX: 0 },
     { scaleX: 1, ease: 'none', scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: .4 } });
 
-  gsap.to('.l-dust', { xPercent: -3, duration: 40, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+  gsap.to('.l-dust, .l-snow', { xPercent: -3, duration: 40, repeat: -1, yoyo: true, ease: 'sine.inOut' });
   gsap.to('.l-suns', { opacity: .86, duration: 4.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
   gsap.to('.l-suns', { scale: 1.035, duration: 8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
