@@ -59,6 +59,7 @@ main { position: relative; }
 .act3 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
 .act4 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
 .act5 { height: 950svh; contain-intrinsic-size: auto 950svh; }
+.act6 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
 
 .act__sticky {
   position: sticky;
@@ -231,6 +232,33 @@ main { position: relative; }
 
 .l-flash { inset: 0; background: radial-gradient(ellipse at 50% 38%, #fff, #8ddcff 35%, rgba(141, 220, 255, 0) 75%); mix-blend-mode: screen; opacity: 0; }
 
+/* act VI · 06-hoth */
+
+.act6 { --ratio: 1672 / 941; }
+
+.l-hoth { inset: 0; }
+.l-hoth > img { object-fit: cover; }
+
+.l-ice { width: 78%; left: 26%; bottom: -8%; aspect-ratio: 1536 / 1024; } /* x0–100 y16–100, anchor 0 */
+
+.l-probe { width: 14%; left: 62%; bottom: 28%; aspect-ratio: 1536 / 1024; } /* x4–96 y1–98 */
+.l-probe::after {
+  content: "";
+  position: absolute;
+  left: 88%; top: 26%;
+  width: 6%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(#ff5a3c, rgba(255, 90, 60, 0) 70%);
+  animation: blink 1.6s ease-in-out infinite;
+}
+@keyframes blink { 50% { opacity: .1; } }
+
+.l-snow { inset: -4% -8%; mix-blend-mode: screen; filter: grayscale(1) brightness(.9); opacity: .4; }
+.l-snow > img { object-fit: cover; }
+
+.l-cold { inset: 0; background: linear-gradient(to bottom, rgba(6, 14, 30, .9), rgba(6, 14, 30, .2) 50%, rgba(120, 170, 220, .25)); opacity: 0; }
+
 /* ============================================================================
    lettering — captions, balloons, sound effects, controls
    ========================================================================= */
@@ -315,6 +343,8 @@ main { position: relative; }
 :where(.act4 .scene:nth-child(2)) .balloon { left: 8%; top: 42%; }
 :where(.act5 .scene:nth-child(2)) .balloon { left: 8%; top: 12%; }
 :where(.act5 .scene:nth-child(4)) .balloon { left: 8%; bottom: 14%; }
+:where(.act6 .scene:nth-child(2)) .balloon { left: 50%; top: 30%; translate: -50% 0; }
+:where(.act6 .scene:nth-child(4)) .balloon { left: 10%; top: 32%; }
 
 /* a voice from off-panel: dashed outline, no tail, a lighter shadow */
 .balloon--off { border-style: dashed; filter: drop-shadow(4px 5px 0 rgba(22, 16, 11, .3)); }
@@ -585,9 +615,11 @@ main { position: relative; }
   .auto { font-size: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .auto button { padding-inline: .6em; }
   .act1 { --ratio: 1 / 1; }
-  .act2, .act3, .act4, .act5 { --ratio: 5 / 4; }
+  .act2, .act3, .act4, .act5, .act6 { --ratio: 5 / 4; }
   .l-stall { width: 48%; left: 48%; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
+  .l-ice { width: 110%; left: 0; }
+  .l-probe { width: 22%; left: 48%; bottom: 30%; }
   .sfx--engine { left: 8%; top: 56%; }
   .sfx--jump { top: 28%; }
   .l-settlement { left: 20%; }

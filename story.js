@@ -212,7 +212,7 @@ function ambient() {
   gsap.fromTo('#progress', { scaleX: 0 },
     { scaleX: 1, ease: 'none', scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: .4 } });
 
-  gsap.to('.l-dust', { xPercent: -3, duration: 40, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+  gsap.to('.l-dust, .l-snow', { xPercent: -3, duration: 40, repeat: -1, yoyo: true, ease: 'sine.inOut' });
   gsap.to('.l-suns', { opacity: .86, duration: 4.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
   gsap.to('.l-suns', { scale: 1.035, duration: 8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
