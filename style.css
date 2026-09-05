@@ -469,6 +469,13 @@ main { position: relative; }
 .auto__speeds { display: flex; gap: 2px; margin-left: 4px; padding-left: 6px; border-left: 2px solid rgba(255, 255, 255, .18); }
 .auto__speeds button:hover { background: rgba(255, 255, 255, .12); }
 .auto__speeds [aria-pressed="true"] { background: var(--saber); color: var(--ink); }
+.auto__sound { display: flex; margin-left: 4px; padding-inline: .6em; }
+.auto__sound svg { width: 14px; height: 14px; fill: currentColor; }
+.auto__sound .waves, .auto__sound .mute { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.auto__sound:hover { background: rgba(255, 255, 255, .12); }
+.auto__sound[aria-pressed="true"] { color: var(--saber); }
+.auto__sound .waves, .auto__sound[aria-pressed="true"] .mute { display: none; }
+.auto__sound[aria-pressed="true"] .waves { display: block; }
 :root:not(.js) .auto, .static .auto { display: none; }
 
 #progress {
