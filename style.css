@@ -55,8 +55,8 @@ main { position: relative; }
   content-visibility: auto;
   contain-intrinsic-size: auto 1000svh;
 }
-#act-2 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
-#act-3 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
+.act2 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
+.act3 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
 
 .act__sticky {
   position: sticky;
