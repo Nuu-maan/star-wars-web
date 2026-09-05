@@ -1,12 +1,27 @@
+/* ============================================================================
+   The Waiting World — a scroll-driven comic
+   Type system:  Anton (display / poster titles)
+                 Bangers (lettering furniture: speaker tags, SFX, controls)
+                 Comic Neue (caption + balloon lettering)
+   ========================================================================= */
+
 :root {
-  --ink: #2a1710;
-  --paper: #f4e7c9;
-  --cream: #fff7e6;
-  --night: #170d09;
+  --ink: #16100b;
+  --ink-line: rgba(22, 16, 11, .45);
+  --paper: #f7e8c2;
+  --cream: #fffbef;
+  --night: #120b07;
+  --saber: #ffe81f;   /* the yellow of a certain opening crawl */
   --glow: #ffd48a;
   --holo: #8ddcff;
-  --serif: "Fraunces", Georgia, "Times New Roman", serif;
-  --hand: "Patrick Hand", "Comic Sans MS", cursive;
+  --tag: #ad3419;     /* comic speaker-tag red */
+  --ink-w: 3px;
+
+  --display: "Anton", "Arial Narrow", Impact, sans-serif;
+  --comic: "Bangers", "Comic Sans MS", cursive;
+  --letter: "Comic Neue", "Comic Sans MS", "Segoe UI", sans-serif;
+
+  --halftone: radial-gradient(var(--ink-line) .55px, transparent .85px);
 }
 
 * { box-sizing: border-box; }
@@ -15,12 +30,13 @@ body {
   margin: 0;
   background: var(--night);
   color: var(--paper);
-  font-family: var(--serif);
+  font-family: var(--letter);
+  -webkit-font-smoothing: antialiased;
 }
 
 main { position: relative; }
 
-:focus-visible { outline: 3px solid var(--glow); outline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--saber); outline-offset: 3px; }
 
 .visually-hidden {
   position: absolute;
@@ -48,6 +64,19 @@ main { position: relative; }
   height: 100svh;
   overflow: clip;
   background: var(--night);
+}
+
+/* newsprint halftone over the art only — the lettering sits above it */
+.act__sticky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: var(--halftone);
+  background-size: 3px 3px;
+  opacity: .11;
+  mix-blend-mode: multiply;
 }
 
 .stage {
@@ -127,10 +156,12 @@ main { position: relative; }
 .l-mechanic { width: 17%; left: 20%; bottom: 10%; aspect-ratio: 1024 / 1536; }
 .l-mechanic > img { transform: translateY(4%); } /* x15–92 y1–96 */
 
-.l-droid { width: 8%; left: 53%; bottom: 32%; aspect-ratio: 1024 / 1536; }
+/* droid sits ON the table: its casters land on the table top at ~31% */
+.l-droid { width: 8%; left: 53%; bottom: 29%; aspect-ratio: 1024 / 1536; }
 .l-droid > img { transform: translateY(2%); } /* x10–91 y2–98 */
 
-.l-envoy { width: 11%; left: 44.5%; bottom: 37%; aspect-ratio: 1024 / 1536; mix-blend-mode: screen; } /* x29–79 y1–100, anchor 0 */
+/* envoy stands in the emitter cone, not beside it */
+.l-envoy { width: 11%; left: 47.6%; bottom: 31.5%; aspect-ratio: 1024 / 1536; mix-blend-mode: screen; } /* x29–79 y1–100, anchor 0 */
 .js .act:not(.is-played) .holo { opacity: 0; }
 
 .inset {
@@ -138,8 +169,8 @@ main { position: relative; }
   width: 24%;
   aspect-ratio: 1448 / 1086;
   padding: 3%;
-  border: 3px solid var(--paper);
-  box-shadow: 6px 6px 0 var(--ink);
+  border: var(--ink-w) solid var(--ink);
+  box-shadow: 6px 7px 0 var(--ink), inset 0 0 0 2px rgba(141, 220, 255, .35);
   background: radial-gradient(ellipse at 50% 35%, #1d3a55, #0a1420 70%);
 }
 .inset > img { width: 100%; height: 100%; object-fit: contain; } /* x4–97 y10–89 */
@@ -164,12 +195,15 @@ main { position: relative; }
 .l-hermit { width: 16%; left: 48%; bottom: 10%; aspect-ratio: 1024 / 1536; }
 .l-hermit > img { transform: translateY(1%); } /* x13–89 y2–99 */
 
-.l-raiders { width: 10%; left: 84%; bottom: 74%; aspect-ratio: 1536 / 1024; } /* x8–98 y1–100, anchor 0; cliff top runs (82%,27%)→(100%,23%) */
+/* scouts sit on the left shoulder of the cliff so the end-frame keeps all three */
+.l-raiders { width: 9%; left: 82%; bottom: 73.5%; aspect-ratio: 1536 / 1024; } /* x8–98 y1–100, anchor 0; cliff top runs (82%,27%)→(100%,23%) */
 
-/* captions, balloons, controls */
+/* ============================================================================
+   lettering — captions, balloons, sound effects, controls
+   ========================================================================= */
 
 .scene > * { position: absolute; margin: 0; }
-.js [data-in] { opacity: 0; }
+.js [data-in] { opacity: 0; visibility: hidden; }
 
 .tl { left: 6%; top: 8%; }
 .tr { right: 6%; top: 8%; }
@@ -178,71 +212,142 @@ main { position: relative; }
 .tc { left: 50%; top: 10%; translate: -50% 0; }
 .bc { left: 50%; bottom: 9%; translate: -50% 0; }
 
+/* narration box: newsprint paper, hard ink rule, hand-placed tilt */
 .caption {
-  max-width: min(34ch, 88vw);
-  padding: .7em 1em .75em;
-  background: var(--paper);
+  max-width: min(34ch, 84vw);
+  padding: .72em .95em .78em;
+  background-color: var(--paper);
+  background-image: var(--halftone);
+  background-size: 5px 5px;
   color: var(--ink);
-  border: 2px solid var(--ink);
-  box-shadow: 5px 5px 0 var(--ink);
-  font-size: clamp(15px, 1.5vw, 21px);
-  font-weight: 500;
-  line-height: 1.35;
+  border: var(--ink-w) solid var(--ink);
+  box-shadow: 6px 7px 0 var(--ink), inset 0 0 0 2px rgba(255, 255, 255, .35);
+  font-family: var(--letter);
+  font-weight: 700;
+  font-size: clamp(15px, 1.45vw, 21px);
+  line-height: 1.36;
+}
+.caption.tl, .caption.bl { rotate: -.7deg; }
+.caption.tr, .caption.br { rotate: .7deg; }
+
+/* dialogue balloon: caps lettering, ink outline, unified drop shadow */
+.balloon {
+  max-width: min(29ch, 84vw);
+  padding: .8em 1.15em .85em;
+  background-color: var(--cream);
+  color: var(--ink);
+  border: var(--ink-w) solid var(--ink);
+  border-radius: 1.5em;
+  filter: drop-shadow(5px 6px 0 rgba(22, 16, 11, .6));
+  font-family: var(--letter);
+  font-weight: 700;
+  font-size: clamp(16px, 1.55vw, 22px);
+  line-height: 1.3;
+  letter-spacing: .012em;
+  text-transform: uppercase;
+}
+.balloon b {
+  display: block;
+  margin-bottom: .1em;
+  font-family: var(--comic);
+  font-weight: 400;
+  font-size: 1.05em;
+  letter-spacing: .05em;
+  color: var(--tag);
 }
 
-.balloon {
-  max-width: min(30ch, 88vw);
-  padding: .8em 1.1em;
-  background: var(--cream);
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 1.4em;
-  font-family: var(--hand);
-  font-size: clamp(18px, 1.7vw, 24px);
-  line-height: 1.25;
-}
-.balloon b { font-family: var(--serif); font-size: .7em; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: .2em; }
-.balloon--off { border-style: dashed; }
-.balloon--holo { background: #0b1f30; color: var(--holo); border-color: var(--holo); }
-.tail-bl::after, .tail-br::after {
+/* tail: a rotated square carrying only its two outer ink edges */
+.balloon::after {
   content: "";
   position: absolute;
-  bottom: -14px;
-  width: 0; height: 0;
-  border-style: solid;
+  width: 24px; height: 24px;
+  bottom: -13px;
+  background: inherit;
+  border: 0 solid var(--ink);
+  border-right-width: var(--ink-w);
+  border-bottom-width: var(--ink-w);
+  border-bottom-right-radius: 4px;
 }
-.tail-bl::after { left: 14%; border-width: 16px 14px 0 0; border-color: var(--ink) transparent transparent transparent; }
-.tail-br::after { right: 14%; border-width: 16px 0 0 14px; border-color: var(--ink) transparent transparent transparent; }
+.tail-bl::after { left: 16%; transform: rotate(64deg); }
+.tail-br::after { right: 16%; transform: rotate(26deg); }
+.tail-bc::after { left: calc(50% - 12px); transform: rotate(45deg); }
+.balloon:not([class*="tail-"])::after { display: none; }
 
-:where(.act2 .scene:nth-child(2)) .balloon { left: 28%; top: 30%; }
-:where(.act2 .scene:nth-child(4)) .balloon { left: 24%; top: 26%; }
-:where(.act3 .scene:nth-child(3)) .balloon { left: 54%; top: 22%; }
-:where(.act1) .balloon { left: 50%; bottom: 14%; translate: -50% 0; }
+/* where each balloon hangs in its panel, so the tail lands on the speaker */
+:where(.act1 .scene:nth-child(2)) .balloon { left: 58%; bottom: 16%; translate: none; }
+:where(.act1 .scene:nth-child(4)) .balloon { left: 50%; bottom: 13%; translate: -50% 0; }
+:where(.act2 .scene:nth-child(2)) .balloon { left: 22%; top: 22%; }
+:where(.act2 .scene:nth-child(4)) .balloon { left: 26%; top: 18%; }
+:where(.act3 .scene:nth-child(3)) .balloon { left: 44%; top: 6%; }
 
-.title, .endcard {
-  color: var(--cream);
-  text-align: center;
-  text-shadow: 0 3px 0 var(--ink), 0 0 40px rgba(0, 0, 0, .5);
-  white-space: nowrap;
+/* a voice from off-panel: dashed outline, no tail, a lighter shadow */
+.balloon--off { border-style: dashed; filter: drop-shadow(4px 5px 0 rgba(22, 16, 11, .3)); }
+.balloon--off::after { display: none; }
+
+/* a voice arriving down a wire */
+.balloon--holo {
+  background-color: #08202f;
+  background-image: repeating-linear-gradient(to bottom, rgba(141, 220, 255, .13) 0 1px, transparent 1px 4px);
+  color: var(--holo);
+  border-color: var(--holo);
+  filter: drop-shadow(0 0 14px rgba(141, 220, 255, .45));
 }
-.title { font-size: clamp(40px, 8.5vw, 132px); font-weight: 900; letter-spacing: -.02em; line-height: 1; }
-.endcard { font-size: clamp(28px, 4.5vw, 64px); font-weight: 700; font-style: italic; top: 42%; }
+.balloon--holo b { color: #d6f2ff; }
+.balloon--holo::after { border-color: var(--holo); }
+
+/* sound effects */
+.sfx {
+  font-family: var(--comic);
+  font-weight: 400;
+  font-size: clamp(30px, 4.6vw, 76px);
+  line-height: .9;
+  letter-spacing: .02em;
+  color: var(--saber);
+  -webkit-text-stroke: 3px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 5px 6px 0 var(--ink);
+}
+.sfx--far { left: 30%; top: 43%; rotate: -6deg; font-size: clamp(22px, 2.9vw, 46px); opacity: .95; }
+.sfx--holo { left: 38%; top: 52%; rotate: -4deg; color: var(--holo); font-size: clamp(20px, 2.4vw, 38px); }
+
+/* poster titles */
+.title, .endcard, .loader__title, .chapter__title {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -.005em;
+  line-height: .94;
+  color: var(--saber);
+  -webkit-text-stroke: .055em var(--ink);
+  paint-order: stroke fill;
+  filter:
+    drop-shadow(0 .055em 0 var(--ink))
+    drop-shadow(0 .09em 0 rgba(22, 16, 11, .45))
+    drop-shadow(0 0 .4em rgba(0, 0, 0, .65));
+}
+
+.title, .endcard { text-align: center; white-space: nowrap; }
+.title { font-size: clamp(38px, 8.6vw, 140px); }
+.endcard { font-size: clamp(26px, 4.6vw, 68px); top: 42%; }
 
 .hint {
-  font-size: 13px;
-  letter-spacing: .3em;
+  font-family: var(--comic);
+  font-size: clamp(14px, 1.1vw, 18px);
+  letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--cream);
-  text-shadow: 0 1px 0 var(--ink), 0 0 12px rgba(0, 0, 0, .6);
+  -webkit-text-stroke: 2px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, .45);
   text-align: center;
   white-space: nowrap;
 }
 .hint span {
   display: block;
-  width: 10px; height: 10px;
-  margin: 10px auto 0;
-  border-right: 2px solid var(--cream);
-  border-bottom: 2px solid var(--cream);
+  width: 11px; height: 11px;
+  margin: 12px auto 0;
+  border-right: 3px solid var(--cream);
+  border-bottom: 3px solid var(--cream);
   transform: rotate(45deg);
   animation: nudge 1.8s ease-in-out infinite;
 }
@@ -251,45 +356,76 @@ main { position: relative; }
 .play {
   pointer-events: auto;
   cursor: pointer;
-  padding: .75em 1.4em;
-  background: var(--ink);
-  color: var(--glow);
-  border: 2px solid var(--glow);
+  padding: .5em 1.25em .42em;
+  background: var(--saber);
+  color: var(--ink);
+  border: var(--ink-w) solid var(--ink);
   border-radius: 999px;
-  font: 700 clamp(14px, 1.2vw, 17px) var(--serif);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  box-shadow: 0 0 0 0 rgba(255, 212, 138, .5);
-  animation: pulse 2.4s ease-out infinite;
+  box-shadow: 5px 6px 0 var(--ink);
+  font: 400 clamp(16px, 1.35vw, 22px) var(--comic);
+  letter-spacing: .06em;
+  transition: background-color .15s, box-shadow .12s, translate .12s;
 }
-@keyframes pulse { 60% { box-shadow: 0 0 0 14px rgba(255, 212, 138, 0); } 100% { box-shadow: 0 0 0 14px rgba(255, 212, 138, 0); } }
-.play:focus-visible { opacity: 1 !important; }
-.play:hover { background: var(--glow); color: var(--ink); }
-.is-played .play { color: rgba(255, 212, 138, .5); border-color: rgba(255, 212, 138, .35); animation: none; }
+.play:hover { background: #fff6a8; box-shadow: 7px 8px 0 var(--ink); translate: -2px -2px; }
+.play:active { box-shadow: 2px 2px 0 var(--ink); translate: 3px 4px; }
+.is-played .play { background: rgba(255, 232, 31, .28); color: rgba(22, 16, 11, .55); box-shadow: 3px 3px 0 rgba(22, 16, 11, .5); }
 
 .fragments {
   right: 6%;
   top: 8%;
-  width: min(36ch, 88vw);
+  width: min(36ch, 84vw);
   display: grid;
   gap: .6em;
 }
 .fragments > * { position: static; }
-:where(.act3) .fragments { top: 40%; width: min(26ch, 88vw); }
+:where(.act3) .fragments { top: 40%; width: min(27ch, 84vw); }
 .js .fragment:not(.is-shown) { display: none; }
+
+/* a caption inside a transmission is machine text, not narration */
+.fragment.caption {
+  max-width: none;
+  background-color: #08202f;
+  background-image: repeating-linear-gradient(to bottom, rgba(141, 220, 255, .12) 0 1px, transparent 1px 4px);
+  color: var(--holo);
+  border-color: var(--holo);
+  box-shadow: 5px 6px 0 rgba(0, 0, 0, .55), inset 0 0 22px rgba(141, 220, 255, .12);
+  rotate: 0deg;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-size: clamp(13px, 1.15vw, 17px);
+}
+
+/* ============================================================================
+   page furniture
+   ========================================================================= */
+
+/* the panel gutter the whole comic is printed inside */
+#frame {
+  position: fixed;
+  inset: 0;
+  z-index: 14;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 clamp(7px, .75vw, 13px) var(--ink),
+    inset 0 0 0 calc(clamp(7px, .75vw, 13px) + 2px) rgba(247, 232, 194, .22),
+    inset 0 0 110px rgba(0, 0, 0, .5);
+}
 
 .skip {
   position: fixed;
-  top: 12px; right: 12px;
+  top: 14px; right: 18px;
   z-index: 20;
-  padding: .5em .9em;
-  background: rgba(23, 13, 9, .75);
+  padding: .35em .9em .28em;
+  background: var(--ink);
   color: var(--paper);
-  border: 1px solid rgba(244, 231, 201, .5);
+  border: 2px solid var(--paper);
   border-radius: 999px;
-  font: 500 13px var(--serif);
+  font: 400 14px/1.4 var(--comic);
+  letter-spacing: .06em;
   cursor: pointer;
+  transition: background-color .15s, color .15s;
 }
+.skip:hover { background: var(--paper); color: var(--ink); }
 :root:not(.js) .skip, .static .skip { display: none; }
 
 #veil {
@@ -299,6 +435,8 @@ main { position: relative; }
   display: grid;
   place-content: center;
   background: var(--night);
+  background-image: var(--halftone), radial-gradient(ellipse at 50% 45%, rgba(255, 232, 31, .07), transparent 62%);
+  background-size: 6px 6px, cover;
   opacity: 0;
   pointer-events: none;
 }
@@ -307,20 +445,30 @@ main { position: relative; }
   margin: 0;
   opacity: 0;
   text-align: center;
-  font-size: clamp(34px, 6vw, 92px);
-  font-weight: 900;
-  color: var(--cream);
-  letter-spacing: -.02em;
-  line-height: 1;
 }
-.chapter span { display: block; margin-bottom: .6em; font-size: 14px; font-weight: 500; letter-spacing: .4em; text-transform: uppercase; color: var(--glow); }
+.chapter__eyebrow {
+  display: block;
+  margin-bottom: .8em;
+  font-family: var(--comic);
+  font-size: clamp(14px, 1.2vw, 19px);
+  letter-spacing: .42em;
+  text-indent: .42em;
+  text-transform: uppercase;
+  color: var(--saber);
+}
+.chapter__title {
+  display: block;
+  font-size: clamp(32px, 6.4vw, 96px);
+  letter-spacing: .012em;
+}
 
 #progress {
   position: fixed;
   left: 0; right: 0; bottom: 0;
-  height: 3px;
+  height: 6px;
   z-index: 15;
-  background: var(--glow);
+  background: var(--saber);
+  border-top: 2px solid var(--ink);
   transform-origin: 0 50%;
   pointer-events: none;
 }
@@ -337,10 +485,21 @@ main { position: relative; }
 }
 .js #loader { display: grid; }
 .js.is-ready #loader { opacity: 0; visibility: hidden; }
-.loader__eyebrow, .loader__sub { margin: 0; letter-spacing: .4em; text-transform: uppercase; font-size: 13px; color: var(--glow); }
-.loader__title { margin: .3em 0; font-size: clamp(36px, 7vw, 100px); font-weight: 900; color: var(--cream); text-shadow: 0 3px 0 var(--ink), 0 0 40px rgba(0, 0, 0, .6); }
+.loader__eyebrow, .loader__sub {
+  margin: 0;
+  font-family: var(--comic);
+  font-size: clamp(13px, 1.1vw, 18px);
+  letter-spacing: .4em;
+  text-indent: .4em;
+  text-transform: uppercase;
+  color: var(--saber);
+  text-shadow: 0 2px 0 var(--ink);
+}
+.loader__title { margin: .18em 0 .24em; font-size: clamp(34px, 7vw, 104px); }
 
-/* narrow viewports */
+/* ============================================================================
+   narrow viewports
+   ========================================================================= */
 
 @media (max-width: 700px) {
   .act1 { --ratio: 1 / 1; }
@@ -352,34 +511,43 @@ main { position: relative; }
   .tc { top: 12%; }
   .bl, .br { bottom: 16%; }
   .tl, .tr, .bl, .br { left: 5%; right: 5%; max-width: none; }
-  .caption { font-size: 14px; }
+  .caption { font-size: 15px; }
   .balloon { font-size: 17px; }
   .scene .balloon { left: 5%; right: 5%; top: 9%; bottom: auto; translate: none; max-width: none; }
   .scene .play { left: 5%; right: auto; bottom: 6%; translate: none; }
   .scene .fragments { top: 30%; left: 5%; right: 5%; width: auto; }
   .inset { width: 34%; top: 4%; left: 4%; }
   .title { white-space: normal; }
+  .skip { top: 10px; right: 10px; padding: .3em .75em .24em; font-size: 12px; }
+  .sfx--far { left: 8%; top: 38%; }
+  .sfx--holo { left: 8%; top: 62%; }
+  .balloon::after { width: 20px; height: 20px; bottom: -11px; }
 }
 
 @media (max-height: 700px) {
   .fragments { gap: .4em; }
-  .fragments .caption { font-size: 14px; padding: .5em .8em; }
+  .fragments .caption { font-size: 13px; padding: .5em .8em; }
   .fragments .balloon { font-size: 16px; padding: .6em .9em; }
 }
 
-/* static document: reduced motion, "skip the animation", or no JS */
+/* ============================================================================
+   static document: reduced motion, "skip the animation", or no JS
+   ========================================================================= */
 
 .static .act, :root:not(.js) .act { height: auto; content-visibility: visible; }
 .static .act__sticky, :root:not(.js) .act__sticky { position: static; height: auto; overflow: visible; padding-bottom: 3rem; }
+.static .act__sticky::after, :root:not(.js) .act__sticky::after { display: none; }
 .static .stage, :root:not(.js) .stage { position: relative; inset: auto; left: 0; translate: none; width: 100%; min-width: 0; overflow: clip; }
 .static .act__ui, :root:not(.js) .act__ui { position: static; }
-.static .scene, :root:not(.js) .scene { position: static; min-width: 0; max-width: 60ch; margin: 1.5rem auto 0; padding: 0 1rem; display: grid; gap: 1rem; }
-.static .scene > *, :root:not(.js) .scene > * { position: static; opacity: 1; transform: none; translate: none; max-width: none; }
+.static .scene, :root:not(.js) .scene { position: static; min-width: 0; max-width: 62ch; margin: 1.5rem auto 0; padding: 0 1rem; display: grid; gap: 1rem; }
+.static .scene > *, :root:not(.js) .scene > * { position: static; opacity: 1; visibility: visible; transform: none; rotate: none; translate: none; max-width: none; }
 .static .balloon, :root:not(.js) .balloon { align-self: start; }
-.static .tail-bl::after, .static .tail-br::after, :root:not(.js) .tail-bl::after, :root:not(.js) .tail-br::after { display: none; }
-.static .title, :root:not(.js) .title { white-space: normal; text-align: left; font-size: clamp(36px, 6vw, 80px); }
-.static .play, :root:not(.js) .play { justify-self: start; animation: none; }
+.static .balloon::after, :root:not(.js) .balloon::after { display: none; }
+.static .title, :root:not(.js) .title { white-space: normal; text-align: left; font-size: clamp(34px, 6vw, 78px); }
+.static .endcard, :root:not(.js) .endcard { text-align: left; }
+.static .sfx, :root:not(.js) .sfx { font-size: clamp(26px, 4vw, 44px); justify-self: start; }
+.static .play, :root:not(.js) .play { justify-self: start; }
 .static .fragments, :root:not(.js) .fragments { width: auto; }
-.static .l-traveler-b, :root:not(.js) .l-traveler-b { display: none; }
-.static #veil, .static #progress, .static .hint, :root:not(.js) .hint { display: none; }
+.static #frame, .static #veil, .static #progress, .static .hint,
+:root:not(.js) #frame, :root:not(.js) .hint { display: none; }
 .static .is-active .camera, .static .is-active .layer { will-change: auto; }
