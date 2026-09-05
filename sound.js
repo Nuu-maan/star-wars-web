@@ -3,9 +3,9 @@ const soundBtn = document.querySelector('.auto__sound');
 const soundOn = () => soundRoot.classList.contains('sound');
 
 const BEDS = [
-  { wind: .5, cutoff: 420, hum: 0 },
-  { wind: .14, cutoff: 220, hum: .05 },
-  { wind: .6, cutoff: 650, hum: 0 },
+  { wind: .9, cutoff: 900, hum: 0 },
+  { wind: .35, cutoff: 500, hum: .08 },
+  { wind: 1, cutoff: 1300, hum: 0 },
 ];
 const target = { wind: 0, cutoff: 400, hum: 0, engine: 0, engineTone: 0 };
 
@@ -27,25 +27,26 @@ function noise() {
 function boot() {
   ctx = new AudioContext();
   master = new GainNode(ctx, { gain: 0 });
-  master.connect(ctx.destination);
+  chain(master, new DynamicsCompressorNode(ctx, { threshold: -18, ratio: 6 }), ctx.destination);
+  soundRoot.classList.add('sound-live');
 
   windFilter = new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 400, Q: .7 });
   windGain = new GainNode(ctx, { gain: 0 });
-  chain(noise(), windFilter, windGain, master);
+  chain(noise(), new BiquadFilterNode(ctx, { type: 'highpass', frequency: 140 }), windFilter, windGain, master);
   const gust = new OscillatorNode(ctx, { frequency: .07 });
-  chain(gust, new GainNode(ctx, { gain: 160 }), windFilter.frequency);
+  chain(gust, new GainNode(ctx, { gain: 300 }), windFilter.frequency);
   gust.start();
 
   humGain = new GainNode(ctx, { gain: 0 });
   humGain.connect(master);
-  [55, 110.5].forEach(f => {
+  [110, 165.5].forEach(f => {
     const o = new OscillatorNode(ctx, { type: 'triangle', frequency: f });
     o.connect(humGain);
     o.start();
   });
 
-  engineOsc = new OscillatorNode(ctx, { type: 'sawtooth', frequency: 46 });
-  engineFilter = new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 140, Q: 2 });
+  engineOsc = new OscillatorNode(ctx, { type: 'sawtooth', frequency: 70 });
+  engineFilter = new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 200, Q: 2 });
   engineGain = new GainNode(ctx, { gain: 0 });
   chain(engineOsc, engineFilter, engineGain, master);
   engineOsc.start();
@@ -60,8 +61,8 @@ function tick() {
   windFilter.frequency.setTargetAtTime(target.cutoff * (1 + 1.5 * boost), t, .3);
   humGain.gain.setTargetAtTime(target.hum, t, .3);
   engineGain.gain.setTargetAtTime(target.engine, t, .15);
-  engineFilter.frequency.setTargetAtTime(120 + 420 * target.engineTone, t, .15);
-  engineOsc.frequency.setTargetAtTime(46 + 16 * target.engineTone, t, .15);
+  engineFilter.frequency.setTargetAtTime(200 + 700 * target.engineTone, t, .15);
+  engineOsc.frequency.setTargetAtTime(70 + 20 * target.engineTone, t, .15);
 }
 
 function holo() {
@@ -78,8 +79,8 @@ function holo() {
     o.start();
     o.stop(t + 9);
   });
-  g.gain.linearRampToValueAtTime(.06, t + 1.5);
-  g.gain.setValueAtTime(.06, t + 6);
+  g.gain.linearRampToValueAtTime(.1, t + 1.5);
+  g.gain.setValueAtTime(.1, t + 6);
   g.gain.linearRampToValueAtTime(0, t + 8.5);
 }
 
@@ -112,7 +113,7 @@ if (!soundRoot.classList.contains('static')) {
       target.hum = BEDS[i].hum * edge;
       if (i === 2) {
         target.engineTone = p < .48 ? Math.sin(Math.PI * p / .48) : 0;
-        target.engine = .1 * target.engineTone;
+        target.engine = .18 * target.engineTone;
       }
     },
   }));
@@ -130,13 +131,13 @@ if (!soundRoot.classList.contains('static')) {
     if (ctx) document.hidden ? ctx.suspend() : soundOn() && ctx.resume();
   });
 
-  let wanted = false;
-  try { wanted = localStorage.sound === '1'; } catch {}
+  let wanted = true;
+  try { wanted = localStorage.sound !== ''; } catch {}
   if (wanted) {
     soundBtn.setAttribute('aria-pressed', true);
     soundRoot.classList.add('sound');
     const resume = () => soundOn() && setSound(true);
-    addEventListener('pointerdown', resume, { once: true });
+    addEventListener('pointerup', resume, { once: true });
     addEventListener('keydown', resume, { once: true });
   }
 }

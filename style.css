@@ -474,6 +474,20 @@ main { position: relative; }
 .auto__sound .waves, .auto__sound .mute { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
 .auto__sound:hover { background: rgba(255, 255, 255, .12); }
 .auto__sound[aria-pressed="true"] { color: var(--saber); }
+.auto__tip {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  padding: .3em .7em .22em;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 999px;
+  font-size: 12px;
+  opacity: 0;
+  translate: 0 4px;
+  transition: opacity .3s, translate .3s;
+}
+.sound:not(.sound-live) .auto__tip { opacity: 1; translate: 0 0; }
 .auto__sound .waves, .auto__sound[aria-pressed="true"] .mute { display: none; }
 .auto__sound[aria-pressed="true"] .waves { display: block; }
 :root:not(.js) .auto, .static .auto { display: none; }
