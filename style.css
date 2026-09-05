@@ -311,7 +311,7 @@ main { position: relative; }
 .sfx--holo { left: 38%; top: 52%; rotate: -4deg; color: var(--holo); font-size: clamp(20px, 2.4vw, 38px); }
 
 /* poster titles */
-.title, .endcard, .loader__title, .chapter__title {
+.title, .endcard, .loader__title {
   font-family: var(--display);
   font-weight: 400;
   text-transform: uppercase;
@@ -428,40 +428,6 @@ main { position: relative; }
 .skip:hover { background: var(--paper); color: var(--ink); }
 :root:not(.js) .skip, .static .skip { display: none; }
 
-#veil {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: grid;
-  place-content: center;
-  background: var(--night);
-  background-image: var(--halftone), radial-gradient(ellipse at 50% 45%, rgba(255, 232, 31, .07), transparent 62%);
-  background-size: 6px 6px, cover;
-  opacity: 0;
-  pointer-events: none;
-}
-.chapter {
-  grid-area: 1 / 1;
-  margin: 0;
-  opacity: 0;
-  text-align: center;
-}
-.chapter__eyebrow {
-  display: block;
-  margin-bottom: .8em;
-  font-family: var(--comic);
-  font-size: clamp(14px, 1.2vw, 19px);
-  letter-spacing: .42em;
-  text-indent: .42em;
-  text-transform: uppercase;
-  color: var(--saber);
-}
-.chapter__title {
-  display: block;
-  font-size: clamp(32px, 6.4vw, 96px);
-  letter-spacing: .012em;
-}
-
 #progress {
   position: fixed;
   left: 0; right: 0; bottom: 0;
@@ -548,6 +514,6 @@ main { position: relative; }
 .static .sfx, :root:not(.js) .sfx { font-size: clamp(26px, 4vw, 44px); justify-self: start; }
 .static .play, :root:not(.js) .play { justify-self: start; }
 .static .fragments, :root:not(.js) .fragments { width: auto; }
-.static #frame, .static #veil, .static #progress, .static .hint,
+.static #frame, .static #progress, .static .hint,
 :root:not(.js) #frame, :root:not(.js) .hint { display: none; }
 .static .is-active .camera, .static .is-active .layer { will-change: auto; }
