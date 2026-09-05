@@ -1,9 +1,6 @@
 .DS_Store
 Thumbs.db
 
-# agent skills are installed per-checkout, not committed
-.agents/
-.claude/
 skills-lock.json
 .vercel
 .env*
