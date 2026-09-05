@@ -3,10 +3,17 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 
 const root = document.documentElement;
 const acts = [...document.querySelectorAll('.act')];
-const veil = document.getElementById('veil');
 const clamp = gsap.utils.clamp;
+const DIP = .04;
 const isStatic = matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (isStatic) root.classList.add('static');
+
+const lenis = isStatic ? null : new Lenis({ autoRaf: false });
+if (lenis) {
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
 
 /* ---------------------------------------------------------------- keyframes */
 
@@ -133,6 +140,8 @@ function build(act, i) {
       tl.call(() => reveal(act, at ? 'fast' : 'instant'), [], from + span * at);
     }
   });
+  if (i) tl.fromTo(view, { opacity: 0 }, { opacity: 1, duration: DIP }, 0);
+  if (i < acts.length - 1) tl.to(view, { opacity: 0, duration: DIP, immediateRender: false }, 1 - DIP);
   tl.set({}, {}, 1);
 
   // foreground rock and arch layers lag a touch behind a fast scroll
@@ -150,24 +159,6 @@ function build(act, i) {
     onToggle: self => act.classList.toggle('is-active', self.isActive),
   });
 
-  if (i) chapterCard(act, i + 1);
-}
-
-// the black between acts, with its title card
-function chapterCard(act, n) {
-  const chapter = veil.querySelector(`[data-chapter="${n}"]`);
-  const eyebrow = chapter.querySelector('.chapter__eyebrow');
-  const chars = SplitText.create(chapter.querySelector('.chapter__title'), { type: 'chars' }).chars;
-
-  gsap.timeline({ scrollTrigger: { trigger: act, start: 'top bottom+=70%', end: 'top top-=70%', scrub: .8 } })
-    .fromTo(veil, { autoAlpha: 0 }, { autoAlpha: 1, duration: 70, ease: 'power1.in' }, 0)
-    .fromTo(chapter, { autoAlpha: 0 }, { autoAlpha: 1, duration: 10, ease: 'none' }, 45)
-    .fromTo(eyebrow, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 40, ease: 'power2.out' }, 45)
-    .fromTo(chars, { autoAlpha: 0, yPercent: 110, rotation: -10 },
-      { autoAlpha: 1, yPercent: 0, rotation: 0, duration: 45, ease: 'back.out(2)', stagger: { amount: 42 } }, 58)
-    .fromTo(chapter, { autoAlpha: 1, y: 0 },
-      { autoAlpha: 0, y: -26, duration: 45, ease: 'power2.in', immediateRender: false }, 168)
-    .fromTo(veil, { autoAlpha: 1 }, { autoAlpha: 0, duration: 70, ease: 'power1.out', immediateRender: false }, 178);
 }
 
 /* -------------------------------------------------------------- transmission */
@@ -243,9 +234,10 @@ document.querySelector('.skip').addEventListener('click', () => {
   root.classList.add('static');
   ScrollTrigger.getAll().forEach(t => t.kill());
   gsap.globalTimeline.clear();
-  gsap.set('.camera, .layer, .holo, .stage, [data-in], #veil, .chapter', { clearProps: 'all' });
+  gsap.set('.camera, .layer, .holo, .stage, .act__sticky, [data-in]', { clearProps: 'all' });
   acts.forEach(preload);
   acts.forEach(act => reveal(act, 'instant'));
+  lenis?.destroy();
   scrollTo(0, 0);
 });
 
