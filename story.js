@@ -141,8 +141,6 @@ function build(act, i) {
     }
   });
   if (act.dataset.shake) tl.call(shake, [act.querySelector('.camera')], +act.dataset.shake);
-  if (i) tl.fromTo(view, { opacity: 0 }, { opacity: 1, duration: DIP }, 0);
-  if (i < acts.length - 1) tl.to(view, { opacity: 0, duration: DIP, immediateRender: false }, 1 - DIP);
   tl.set({}, {}, 1);
 
   // foreground rock and arch layers lag a touch behind a fast scroll
@@ -158,6 +156,23 @@ function build(act, i) {
     onEnter: () => preload(acts[i + 1]),
     onUpdate: self => lag && lag(clamp(-2, 2, self.getVelocity() / 1400)),
     onToggle: self => act.classList.toggle('is-active', self.isActive),
+  });
+
+  // the seam dips get their own scroll-locked triggers. On the scrubbed timeline they
+  // lag the scroll, so the stage was still lit when the sticky let go and slid up,
+  // leaving art in the top of the frame and black under it.
+  const dip = () => DIP * (act.offsetHeight - innerHeight);
+
+  if (i) ScrollTrigger.create({
+    trigger: act, start: 'top top', end: () => '+=' + dip(),
+    scrub: true, invalidateOnRefresh: true,
+    animation: gsap.fromTo(view, { opacity: 0 }, { opacity: 1, ease: 'none' }),
+  });
+
+  if (i < acts.length - 1) ScrollTrigger.create({
+    trigger: act, start: () => 'bottom bottom+=' + dip(), end: 'bottom bottom',
+    scrub: true, invalidateOnRefresh: true,
+    animation: gsap.fromTo(view, { opacity: 1 }, { opacity: 0, ease: 'none', immediateRender: false }),
   });
 
 }
