@@ -672,8 +672,8 @@ main { position: relative; }
   .l-stall { width: 48%; left: 48%; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
   .l-ice { width: 110%; left: 0; }
-  .l-probe { width: 22%; left: 48%; bottom: 30%; }
-  .l-structure { width: 26%; left: 46%; bottom: 30%; }
+  .l-probe { width: 22%; left: 58%; bottom: 30%; }
+  .l-structure { width: 22%; left: 54%; bottom: 48%; }
   .l-port > img { object-position: 0 50%; }
   .l-signs > img { object-position: 100% 30%; }
   .l-walk { inset: 0 -25% 0 25%; }
