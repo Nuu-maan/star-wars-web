@@ -60,6 +60,9 @@ main { position: relative; }
 .act4 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
 .act5 { height: 950svh; contain-intrinsic-size: auto 950svh; }
 .act6 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
+.act7 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
+.act8 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
+.act9 { height: 1000svh; contain-intrinsic-size: auto 1000svh; }
 
 .act__sticky {
   position: sticky;
@@ -210,19 +213,8 @@ main { position: relative; }
 .l-port { inset: 0; }
 .l-port > img { object-fit: cover; }
 
-.l-freighter { width: 22%; left: 15%; bottom: 31%; aspect-ratio: 1536 / 1024; } /* x2–97 y13–84 */
-.l-freighter::after {
-  content: "";
-  position: absolute;
-  left: 9%; top: 34%;
-  width: 7%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(#ffb060, rgba(255, 150, 60, 0) 70%);
-  animation: blink 2.4s ease-in-out infinite;
-}
-
-.l-walkers { width: 13%; left: 40%; bottom: -3%; aspect-ratio: 1024 / 1536; transform-origin: 50% 100%; } /* x9–99 y2–98 */
+.l-walk { inset: 0; opacity: 0; }
+.l-walk > img { object-fit: cover; object-position: 50% 40%; }
 
 .l-signs { inset: 0; }
 .l-signs > img { object-fit: cover; object-position: 50% 30%; }
@@ -262,7 +254,7 @@ main { position: relative; }
 
 .l-ice { width: 78%; left: 26%; bottom: -8%; aspect-ratio: 1536 / 1024; } /* x0–100 y16–100, anchor 0 */
 
-.l-structure { width: 24%; left: 34%; bottom: 33%; aspect-ratio: 1536 / 1024; } /* x1–99 y14–86 */
+.l-structure { width: 18%; left: 42%; bottom: 23%; aspect-ratio: 1536 / 1024; } /* x1–99 y14–86 */
 
 .l-probe { width: 14%; left: 62%; bottom: 28%; aspect-ratio: 1536 / 1024; } /* x4–96 y1–98 */
 .l-probe::after {
@@ -281,6 +273,39 @@ main { position: relative; }
 .l-snow > img { object-fit: cover; }
 
 .l-cold { inset: 0; background: linear-gradient(to bottom, rgba(6, 14, 30, .9), rgba(6, 14, 30, .2) 50%, rgba(120, 170, 220, .25)); opacity: 0; }
+
+/* act VII · 07-ice-landing */
+
+.act7 { --ratio: 1672 / 941; }
+
+.l-land { inset: 0; }
+.l-land > img { object-fit: cover; }
+
+/* the pad plate is a wide strip; only its top third rises into shot */
+.l-pad { width: 110%; left: -5%; bottom: -40%; aspect-ratio: 1536 / 1024; } /* y23–65 */
+
+.l-ramp { inset: 0; opacity: 0; }
+.l-ramp > img { object-fit: cover; object-position: 50% 35%; }
+
+/* act VIII · 08-buried-signal */
+
+.act8 { --ratio: 1672 / 941; }
+
+.l-vault { inset: 0; }
+.l-vault > img { object-fit: cover; }
+
+.l-console { width: 24%; left: 36%; bottom: 9%; aspect-ratio: 1536 / 1024; } /* x9–93 y6–95 */
+.l-console > img { transition: filter .9s; }
+.act8.is-played .l-console > img { filter: drop-shadow(0 0 26px rgba(120, 210, 255, .8)) brightness(1.1); }
+
+/* act IX · 09-escape-dawn */
+
+.act9 { --ratio: 1672 / 941; }
+
+.l-dawn { inset: 0; }
+.l-dawn > img { object-fit: cover; }
+
+.l-aurora { width: 84%; left: -8%; top: -12%; aspect-ratio: 1536 / 1024; mix-blend-mode: screen; }
 
 /* ============================================================================
    lettering — captions, balloons, sound effects, controls
@@ -368,6 +393,11 @@ main { position: relative; }
 :where(.act5 .scene:nth-child(4)) .balloon { left: 8%; bottom: 14%; }
 :where(.act6 .scene:nth-child(2)) .balloon { left: 50%; top: 30%; translate: -50% 0; }
 :where(.act6 .scene:nth-child(4)) .balloon { left: 10%; top: 32%; }
+:where(.act7 .scene:nth-child(2)) .balloon { left: 8%; top: 14%; }
+:where(.act8 .scene:nth-child(2)) .balloon { left: 42%; top: 24%; }
+:where(.act8 .scene:nth-child(4)) .balloon { left: 8%; bottom: 16%; }
+:where(.act9 .scene:nth-child(2)) .balloon { left: 8%; top: 14%; }
+:where(.act9 .scene:nth-child(4)) .balloon { left: 54%; top: 26%; }
 
 /* a voice from off-panel: dashed outline, no tail, a lighter shadow */
 .balloon--off { border-style: dashed; filter: drop-shadow(4px 5px 0 rgba(22, 16, 11, .3)); }
@@ -638,17 +668,21 @@ main { position: relative; }
   .auto { font-size: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .auto button { padding-inline: .6em; }
   .act1 { --ratio: 1 / 1; }
-  .act2, .act3, .act4, .act5, .act6 { --ratio: 5 / 4; }
+  .act2, .act3, .act4, .act5, .act6, .act7, .act8, .act9 { --ratio: 5 / 4; }
   .l-stall { width: 48%; left: 48%; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
   .l-ice { width: 110%; left: 0; }
   .l-probe { width: 22%; left: 48%; bottom: 30%; }
-  .l-structure { width: 34%; left: 24%; bottom: 36%; }
+  .l-structure { width: 26%; left: 46%; bottom: 30%; }
+  .l-port > img { object-position: 0 50%; }
+  .l-signs > img { object-position: 100% 30%; }
+  .l-walk { inset: 0 -25% 0 25%; }
   .l-pilot { width: 44%; left: 0; }
   .l-receding { width: 70%; left: 8%; top: -6%; }
-  .l-freighter { width: 32%; left: 8%; }
-  .l-walkers { width: 18%; left: 36%; }
   .l-point { width: 26%; left: 64%; bottom: 22%; }
+  .l-pad { width: 140%; left: -20%; bottom: -55%; }
+  .l-console { width: 32%; left: 33%; }
+  .l-aurora { width: 120%; left: -14%; }
   .sfx--engine { left: 8%; top: 56%; }
   .sfx--jump { top: 28%; }
   .l-settlement { left: 20%; }
