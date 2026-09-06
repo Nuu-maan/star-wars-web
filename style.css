@@ -668,17 +668,21 @@ main { position: relative; }
   .auto { font-size: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .auto button { padding-inline: .6em; }
   .act1 { --ratio: 1 / 1; }
-  .act2, .act3, .act4, .act5, .act6 { --ratio: 5 / 4; }
+  .act2, .act3, .act4, .act5, .act6, .act7, .act8, .act9 { --ratio: 5 / 4; }
   .l-stall { width: 48%; left: 48%; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
   .l-ice { width: 110%; left: 0; }
   .l-probe { width: 22%; left: 48%; bottom: 30%; }
-  .l-structure { width: 34%; left: 24%; bottom: 36%; }
+  .l-structure { width: 26%; left: 46%; bottom: 30%; }
+  .l-port > img { object-position: 0 50%; }
+  .l-signs > img { object-position: 100% 30%; }
+  .l-walk { inset: 0 -25% 0 25%; }
   .l-pilot { width: 44%; left: 0; }
   .l-receding { width: 70%; left: 8%; top: -6%; }
-  .l-freighter { width: 32%; left: 8%; }
-  .l-walkers { width: 18%; left: 36%; }
   .l-point { width: 26%; left: 64%; bottom: 22%; }
+  .l-pad { width: 140%; left: -20%; bottom: -55%; }
+  .l-console { width: 32%; left: 33%; }
+  .l-aurora { width: 120%; left: -14%; }
   .sfx--engine { left: 8%; top: 56%; }
   .sfx--jump { top: 28%; }
   .l-settlement { left: 20%; }
