@@ -198,6 +198,8 @@ main { position: relative; }
 .l-hermit { width: 16%; left: 48%; bottom: 10%; aspect-ratio: 1024 / 1536; }
 .l-hermit > img { transform: translateY(1%); } /* x13–89 y2–99 */
 
+.l-point { width: 21%; left: 42%; bottom: 7%; aspect-ratio: 1224 / 1285; } /* x0–98 y0–99 */
+
 /* scouts sit on the left shoulder of the cliff so the end-frame keeps all three */
 .l-raiders { width: 9%; left: 82%; bottom: 73.5%; aspect-ratio: 1536 / 1024; } /* x8–98 y1–100, anchor 0; cliff top runs (82%,27%)→(100%,23%) */
 
@@ -207,6 +209,20 @@ main { position: relative; }
 
 .l-port { inset: 0; }
 .l-port > img { object-fit: cover; }
+
+.l-freighter { width: 22%; left: 15%; bottom: 31%; aspect-ratio: 1536 / 1024; } /* x2–97 y13–84 */
+.l-freighter::after {
+  content: "";
+  position: absolute;
+  left: 9%; top: 34%;
+  width: 7%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(#ffb060, rgba(255, 150, 60, 0) 70%);
+  animation: blink 2.4s ease-in-out infinite;
+}
+
+.l-walkers { width: 13%; left: 40%; bottom: -3%; aspect-ratio: 1024 / 1536; transform-origin: 50% 100%; } /* x9–99 y2–98 */
 
 .l-signs { inset: 0; }
 .l-signs > img { object-fit: cover; object-position: 50% 30%; }
@@ -223,6 +239,11 @@ main { position: relative; }
 
 .l-cockpit { inset: 0; }
 .l-cockpit > img { object-fit: cover; }
+
+.l-pilot { width: 31%; left: 2%; bottom: -2%; aspect-ratio: 1230 / 1278; } /* x0–100 y1–75 */
+
+/* the mask keeps only the planet out of the plate; screen drops what the mask feathers in */
+.l-receding { width: 56%; left: 13%; top: -4%; aspect-ratio: 1672 / 941; mix-blend-mode: screen; transform-origin: 20% 68%; opacity: 0; mask-image: radial-gradient(ellipse 26% 46% at 20% 68%, #000 75%, transparent); }
 
 .l-frame { inset: 0; }
 .l-frame > img { object-fit: cover; }
@@ -241,6 +262,8 @@ main { position: relative; }
 
 .l-ice { width: 78%; left: 26%; bottom: -8%; aspect-ratio: 1536 / 1024; } /* x0–100 y16–100, anchor 0 */
 
+.l-structure { width: 24%; left: 34%; bottom: 33%; aspect-ratio: 1536 / 1024; } /* x1–99 y14–86 */
+
 .l-probe { width: 14%; left: 62%; bottom: 28%; aspect-ratio: 1536 / 1024; } /* x4–96 y1–98 */
 .l-probe::after {
   content: "";
@@ -254,7 +277,7 @@ main { position: relative; }
 }
 @keyframes blink { 50% { opacity: .1; } }
 
-.l-snow { inset: -4% -8%; mix-blend-mode: screen; filter: grayscale(1) brightness(.9); opacity: .4; }
+.l-snow { inset: -4% -8%; mix-blend-mode: screen; opacity: .4; }
 .l-snow > img { object-fit: cover; }
 
 .l-cold { inset: 0; background: linear-gradient(to bottom, rgba(6, 14, 30, .9), rgba(6, 14, 30, .2) 50%, rgba(120, 170, 220, .25)); opacity: 0; }
@@ -620,11 +643,17 @@ main { position: relative; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
   .l-ice { width: 110%; left: 0; }
   .l-probe { width: 22%; left: 48%; bottom: 30%; }
+  .l-structure { width: 34%; left: 24%; bottom: 36%; }
+  .l-pilot { width: 44%; left: 0; }
+  .l-receding { width: 70%; left: 8%; top: -6%; }
+  .l-freighter { width: 32%; left: 8%; }
+  .l-walkers { width: 18%; left: 36%; }
+  .l-point { width: 26%; left: 64%; bottom: 22%; }
   .sfx--engine { left: 8%; top: 56%; }
   .sfx--jump { top: 28%; }
   .l-settlement { left: 20%; }
   .l-mechanic { left: 26%; }
-  .l-raiders { width: 8%; left: 52%; bottom: 44%; }
+  .l-raiders { width: 8%; left: 93.5%; bottom: 66%; }
   .tl, .tr { top: 9%; }
   .tc { top: 12%; }
   .bl, .br { bottom: 16%; }
