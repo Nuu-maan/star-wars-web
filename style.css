@@ -210,19 +210,8 @@ main { position: relative; }
 .l-port { inset: 0; }
 .l-port > img { object-fit: cover; }
 
-.l-freighter { width: 22%; left: 15%; bottom: 31%; aspect-ratio: 1536 / 1024; } /* x2–97 y13–84 */
-.l-freighter::after {
-  content: "";
-  position: absolute;
-  left: 9%; top: 34%;
-  width: 7%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(#ffb060, rgba(255, 150, 60, 0) 70%);
-  animation: blink 2.4s ease-in-out infinite;
-}
-
-.l-walkers { width: 13%; left: 40%; bottom: -3%; aspect-ratio: 1024 / 1536; transform-origin: 50% 100%; } /* x9–99 y2–98 */
+.l-walk { inset: 0; opacity: 0; }
+.l-walk > img { object-fit: cover; object-position: 50% 40%; }
 
 .l-signs { inset: 0; }
 .l-signs > img { object-fit: cover; object-position: 50% 30%; }
