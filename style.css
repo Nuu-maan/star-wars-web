@@ -67,7 +67,9 @@ main { position: relative; }
 .act__sticky {
   position: sticky;
   top: 0;
-  height: 100svh;
+  /* must equal the live viewport: shorter and a black band shows under the art,
+     taller and the stage lets go before the act's scrub ends */
+  height: 100dvh;
   overflow: clip;
   background: var(--night);
 }
