@@ -198,6 +198,8 @@ main { position: relative; }
 .l-hermit { width: 16%; left: 48%; bottom: 10%; aspect-ratio: 1024 / 1536; }
 .l-hermit > img { transform: translateY(1%); } /* x13–89 y2–99 */
 
+.l-point { width: 21%; left: 42%; bottom: 7%; aspect-ratio: 1224 / 1285; } /* x0–98 y0–99 */
+
 /* scouts sit on the left shoulder of the cliff so the end-frame keeps all three */
 .l-raiders { width: 9%; left: 82%; bottom: 73.5%; aspect-ratio: 1536 / 1024; } /* x8–98 y1–100, anchor 0; cliff top runs (82%,27%)→(100%,23%) */
 
