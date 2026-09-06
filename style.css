@@ -643,6 +643,12 @@ main { position: relative; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
   .l-ice { width: 110%; left: 0; }
   .l-probe { width: 22%; left: 48%; bottom: 30%; }
+  .l-structure { width: 34%; left: 24%; bottom: 36%; }
+  .l-pilot { width: 44%; left: 0; }
+  .l-receding { width: 70%; left: 8%; top: -6%; }
+  .l-freighter { width: 32%; left: 8%; }
+  .l-walkers { width: 18%; left: 36%; }
+  .l-point { width: 26%; left: 64%; bottom: 22%; }
   .sfx--engine { left: 8%; top: 56%; }
   .sfx--jump { top: 28%; }
   .l-settlement { left: 20%; }
