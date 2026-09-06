@@ -240,6 +240,11 @@ main { position: relative; }
 .l-cockpit { inset: 0; }
 .l-cockpit > img { object-fit: cover; }
 
+.l-pilot { width: 31%; left: 2%; bottom: -2%; aspect-ratio: 1230 / 1278; } /* x0–100 y1–75 */
+
+/* the mask keeps only the planet out of the plate; screen drops what the mask feathers in */
+.l-receding { width: 56%; left: 13%; top: -4%; aspect-ratio: 1672 / 941; mix-blend-mode: screen; transform-origin: 20% 68%; opacity: 0; mask-image: radial-gradient(ellipse 26% 46% at 20% 68%, #000 75%, transparent); }
+
 .l-frame { inset: 0; }
 .l-frame > img { object-fit: cover; }
 
