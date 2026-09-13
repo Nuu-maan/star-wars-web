@@ -120,7 +120,7 @@ if (!soundRoot.classList.contains('static')) {
       target.engineTone = i === 2 ? (p < .48 ? Math.sin(Math.PI * p / .48) : 0)
         : i === 4 ? clamp(0, 1, (p - .6) / .35) * edge
         : i === 6 ? clamp(0, 1, (.5 - p) / .4) * edge
-        : i === 8 ? clamp(0, 1, (.4 - p) / .3) * edge : 0;
+        : i === 8 ? clamp(0, 1, (p - .44) / .14) * edge : 0;
       target.engine = (i === 4 ? .24 : .18) * target.engineTone;
       if (i === 4) target.wind += .8 * clamp(0, 1, (p - .85) / .12) * edge;
     },
