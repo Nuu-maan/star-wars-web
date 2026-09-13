@@ -286,7 +286,7 @@ main { position: relative; }
 /* the pad plate is a wide strip; only its top third rises into shot */
 .l-pad { width: 110%; left: -5%; bottom: -40%; aspect-ratio: 1536 / 1024; } /* y23–65 */
 
-.l-ramp { inset: 0; opacity: 0; }
+.l-ramp, .l-signal, .l-base { inset: 0; opacity: 0; }
 .l-ramp > img { object-fit: cover; object-position: 50% 35%; }
 
 /* act VIII · 08-buried-signal */
@@ -301,13 +301,19 @@ main { position: relative; }
 .act8.is-played .l-console > img { filter: drop-shadow(0 0 26px rgba(120, 210, 255, .8)) brightness(1.1); }
 
 /* act IX · 09-escape-dawn */
+.l-map { inset: 0; opacity: 0; }
+.l-map > img { object-fit: cover; }
+
 
 .act9 { --ratio: 1672 / 941; }
 
 .l-dawn { inset: 0; }
 .l-dawn > img { object-fit: cover; }
 
-.l-aurora { width: 84%; left: -8%; top: -12%; aspect-ratio: 1536 / 1024; mix-blend-mode: screen; }
+.l-aurora { width: 84%; left: -8%; top: -12%; aspect-ratio: 1536 / 1024; mix-blend-mode: screen; opacity: 0; }
+
+.l-run { inset: 0; }
+.l-run > img { object-fit: cover; object-position: 60% 50%; }
 
 /* ============================================================================
    lettering — captions, balloons, sound effects, controls
@@ -397,9 +403,10 @@ main { position: relative; }
 :where(.act6 .scene:nth-child(4)) .balloon { left: 10%; top: 32%; }
 :where(.act7 .scene:nth-child(2)) .balloon { left: 8%; top: 14%; }
 :where(.act8 .scene:nth-child(2)) .balloon { left: 42%; top: 24%; }
-:where(.act8 .scene:nth-child(4)) .balloon { left: 8%; bottom: 16%; }
-:where(.act9 .scene:nth-child(2)) .balloon { left: 8%; top: 14%; }
-:where(.act9 .scene:nth-child(4)) .balloon { left: 54%; top: 26%; }
+:where(.act7 .scene:nth-child(4)) .balloon { left: 6%; top: 10%; }
+:where(.act8 .scene:nth-child(1)) .balloon { left: 8%; top: 40%; }
+:where(.act8 .scene:nth-child(4)) .balloon { left: 8%; top: 18%; }
+:where(.act9 .scene:nth-child(1)) .balloon { left: 32%; top: 12%; }
 
 /* a voice from off-panel: dashed outline, no tail, a lighter shadow */
 .balloon--off { border-style: dashed; filter: drop-shadow(4px 5px 0 rgba(22, 16, 11, .3)); }
@@ -432,6 +439,8 @@ main { position: relative; }
 .sfx--holo { left: 38%; top: 52%; rotate: -4deg; color: var(--holo); font-size: clamp(20px, 2.4vw, 38px); }
 .sfx--engine { left: 24%; top: 58%; rotate: -3deg; color: var(--glow); }
 .sfx--jump { left: 50%; top: 34%; translate: -50% 0; rotate: -4deg; color: var(--holo); font-size: clamp(44px, 8vw, 130px); }
+.sfx--r2 { left: 58%; top: 30%; rotate: -5deg; color: var(--holo); font-size: clamp(20px, 2.6vw, 40px); }
+.sfx--r2-loud { left: 8%; top: 22%; rotate: -7deg; font-size: clamp(26px, 3.6vw, 58px); }
 
 /* poster titles */
 .title, .endcard, .loader__title {
