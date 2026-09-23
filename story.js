@@ -250,9 +250,23 @@ function ambient() {
     });
     addEventListener('pointermove', e => {
       const x = (e.clientX / innerWidth - .5) * 22, y = (e.clientY / innerHeight - .5) * 14;
+      if (root.classList.contains('lite')) return;
       stages.forEach(([act, toX, toY]) => { if (act.classList.contains('is-active')) { toX(x); toY(y); } });
     }, { passive: true });
   }
+}
+
+// a machine that can't hold ~35fps while scrolling drops the decorative overlays
+function watchFrames() {
+  const frames = [];
+  gsap.ticker.add(function sample(time, delta) {
+    if (document.hidden || !(lenis.isScrolling || auto.on) || delta > 250) return;
+    frames.push(delta);
+    if (frames.length < 120) return;
+    gsap.ticker.remove(sample);
+    frames.sort((a, b) => a - b);
+    if (frames[60] > 28) root.classList.add('lite');
+  });
 }
 
 // the title card is the one piece of lettering that plays itself
@@ -315,6 +329,7 @@ function open(which) {
 function start() {
   acts.forEach(build);
   ambient();
+  watchFrames();
   ScrollTrigger.refresh();
   open('built');
 }

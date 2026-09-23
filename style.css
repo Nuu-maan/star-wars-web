@@ -123,6 +123,8 @@ main { position: relative; }
 .act.is-active .camera,
 .act.is-active .layer { will-change: transform; }
 
+.lite .l-dust, .lite .l-snow, .lite .l-aurora, .lite .act__sticky::after { display: none; }
+
 /* act I · 01-waiting-world */
 
 .act1 { --ratio: 7 / 5; --horizon: 52%; }
