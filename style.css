@@ -64,6 +64,7 @@ main { position: relative; }
 .act8 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
 .act9 { height: 1000svh; contain-intrinsic-size: auto 1000svh; }
 .act10 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
+.act11 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
 
 .act__sticky {
   position: sticky;
@@ -324,6 +325,14 @@ main { position: relative; }
 .l-pursuit, .l-beacon, .l-silent, .l-rim { inset: 0; }
 .l-pursuit > img, .l-beacon > img, .l-silent > img, .l-rim > img { object-fit: cover; }
 .l-rim, .l-silent { opacity: 0; }
+
+/* act XI · 11-silent-relay */
+
+.act11 { --ratio: 1672 / 941; }
+
+.l-hangar, .l-routes, .l-stay, .l-cables { inset: 0; }
+.l-hangar > img, .l-routes > img, .l-stay > img, .l-cables > img { object-fit: cover; }
+.l-routes, .l-stay, .l-cables { opacity: 0; }
 
 /* ============================================================================
    lettering — captions, balloons, sound effects, controls
@@ -690,7 +699,7 @@ main { position: relative; }
   .auto { font-size: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .auto button { padding-inline: .6em; }
   .act1 { --ratio: 1 / 1; }
-  .act2, .act3, .act4, .act5, .act6, .act7, .act8, .act9, .act10 { --ratio: 5 / 4; }
+  .act2, .act3, .act4, .act5, .act6, .act7, .act8, .act9, .act10, .act11 { --ratio: 5 / 4; }
   .l-stall { width: 48%; left: 48%; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
   .l-ice { width: 110%; left: 0; }
@@ -715,6 +724,7 @@ main { position: relative; }
   .l-dawn > img { object-position: 72% 50%; }
   .l-beacon > img { object-position: 22% 50%; }
   .l-silent > img { object-position: 30% 50%; }
+  .l-routes > img { object-position: 36% 50%; }
   .l-settlement { left: 20%; }
   .l-mechanic { left: 26%; }
   .l-raiders { width: 8%; left: 93.5%; bottom: 66%; }
