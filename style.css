@@ -147,7 +147,8 @@ main { position: relative; }
 .l-dust { inset: -4% -8%; }
 .l-dust > img { object-fit: cover; }
 
-.l-shade { inset: 0; background: linear-gradient(to bottom, rgba(40, 12, 6, .9), rgba(40, 12, 6, .35) 60%, rgba(40, 12, 6, .8)); opacity: 0; }
+/* the tints are baked to images: a CSS gradient under the zooming camera re-rasterises every frame in Firefox */
+.l-shade { inset: 0; background: url(assets/tint-shade.png) 0 0 / 100% 100%; opacity: 0; }
 
 .l-rocks-l { width: 60%; left: -4%; bottom: -4%; aspect-ratio: 1536 / 1024; } /* x0–71 y20–100, anchor 0 */
 .l-rocks-r { width: 60%; right: -4%; bottom: -4%; aspect-ratio: 1536 / 1024; } /* x16–100 y22–100, anchor 0 */
@@ -276,7 +277,7 @@ main { position: relative; }
 .l-snow { inset: -4% -8%; opacity: .4; }
 .l-snow > img { object-fit: cover; }
 
-.l-cold { inset: 0; background: linear-gradient(to bottom, rgba(6, 14, 30, .9), rgba(6, 14, 30, .2) 50%, rgba(120, 170, 220, .25)); opacity: 0; }
+.l-cold { inset: 0; background: url(assets/tint-cold.png) 0 0 / 100% 100%; opacity: 0; }
 
 /* act VII · 07-ice-landing */
 
