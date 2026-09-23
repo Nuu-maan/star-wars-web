@@ -63,6 +63,7 @@ main { position: relative; }
 .act7 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
 .act8 { height: 1150svh; contain-intrinsic-size: auto 1150svh; }
 .act9 { height: 1000svh; contain-intrinsic-size: auto 1000svh; }
+.act10 { height: 1100svh; contain-intrinsic-size: auto 1100svh; }
 
 .act__sticky {
   position: sticky;
@@ -316,6 +317,14 @@ main { position: relative; }
 .l-run { inset: 0; }
 .l-run > img { object-fit: cover; object-position: 60% 50%; }
 
+/* act X · 10-red-echo */
+
+.act10 { --ratio: 1672 / 941; }
+
+.l-pursuit, .l-beacon, .l-silent, .l-rim { inset: 0; }
+.l-pursuit > img, .l-beacon > img, .l-silent > img, .l-rim > img { object-fit: cover; }
+.l-rim, .l-silent { opacity: 0; }
+
 /* ============================================================================
    lettering — captions, balloons, sound effects, controls
    ========================================================================= */
@@ -408,6 +417,7 @@ main { position: relative; }
 :where(.act8 .scene:nth-child(2)) .balloon { left: 42%; top: 24%; }
 :where(.act8 .scene:nth-child(4)) .balloon { left: 8%; top: 18%; }
 :where(.act9 .scene:nth-child(1)) .balloon { left: 32%; top: 12%; }
+:where(.act10 .scene:nth-child(1)) .balloon { left: 58%; top: 10%; }
 
 /* a voice from off-panel: dashed outline, no tail, a lighter shadow */
 .balloon--off { border-style: dashed; filter: drop-shadow(4px 5px 0 rgba(22, 16, 11, .3)); }
@@ -680,7 +690,7 @@ main { position: relative; }
   .auto { font-size: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .auto button { padding-inline: .6em; }
   .act1 { --ratio: 1 / 1; }
-  .act2, .act3, .act4, .act5, .act6, .act7, .act8, .act9 { --ratio: 5 / 4; }
+  .act2, .act3, .act4, .act5, .act6, .act7, .act8, .act9, .act10 { --ratio: 5 / 4; }
   .l-stall { width: 48%; left: 48%; }
   .l-jump { width: 92%; left: 4%; top: 14%; }
   .l-ice { width: 110%; left: 0; }
@@ -703,6 +713,8 @@ main { position: relative; }
   .l-base > img { object-position: 82% 50%; }
   .l-map > img { object-position: 76% 50%; }
   .l-dawn > img { object-position: 72% 50%; }
+  .l-beacon > img { object-position: 22% 50%; }
+  .l-silent > img { object-position: 30% 50%; }
   .l-settlement { left: 20%; }
   .l-mechanic { left: 26%; }
   .l-raiders { width: 8%; left: 93.5%; bottom: 66%; }
