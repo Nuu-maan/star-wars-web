@@ -12,6 +12,9 @@ const BEDS = [
   { wind: .85, cutoff: 1100, hum: .05 },
   { wind: .1, cutoff: 300, hum: .12 },
   { wind: .6, cutoff: 1300, hum: .06 },
+  { wind: .08, cutoff: 300, hum: .12 },
+  { wind: .12, cutoff: 400, hum: .15 },
+  { wind: .08, cutoff: 300, hum: .1 },
 ];
 const target = { wind: 0, cutoff: 400, hum: 0, engine: 0, engineTone: 0 };
 
@@ -120,7 +123,9 @@ if (!soundRoot.classList.contains('static')) {
       target.engineTone = i === 2 ? (p < .48 ? Math.sin(Math.PI * p / .48) : 0)
         : i === 4 ? clamp(0, 1, (p - .6) / .35) * edge
         : i === 6 ? clamp(0, 1, (.5 - p) / .4) * edge
-        : i === 8 ? clamp(0, 1, (p - .44) / .14) * edge : 0;
+        : i === 8 ? clamp(0, 1, (p - .44) / .14) * edge
+        : i === 9 ? (p < .64 ? .5 : 0) * edge
+        : i === 11 ? clamp(0, 1, (p - .6) / .16) * edge : 0;
       target.engine = (i === 4 ? .24 : .18) * target.engineTone;
       if (i === 4) target.wind += .8 * clamp(0, 1, (p - .85) / .12) * edge;
     },
