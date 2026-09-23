@@ -4,17 +4,17 @@ const soundOn = () => soundRoot.classList.contains('sound');
 
 const BEDS = [
   { wind: .9, cutoff: 900, hum: 0 },
-  { wind: .35, cutoff: 500, hum: .08 },
-  { wind: 1, cutoff: 1300, hum: 0 },
-  { wind: .45, cutoff: 700, hum: .07 },
-  { wind: .12, cutoff: 300, hum: .14 },
+  { wind: .49, cutoff: 500, hum: .11 },
+  { wind: .69, cutoff: 1300, hum: 0 },
+  { wind: .97, cutoff: 700, hum: .15 },
+  { wind: .18, cutoff: 300, hum: .21 },
   { wind: 1, cutoff: 1600, hum: 0 },
   { wind: .85, cutoff: 1100, hum: .05 },
-  { wind: .1, cutoff: 300, hum: .12 },
+  { wind: .13, cutoff: 300, hum: .16 },
   { wind: .6, cutoff: 1300, hum: .06 },
-  { wind: .08, cutoff: 300, hum: .12 },
-  { wind: .12, cutoff: 400, hum: .15 },
-  { wind: .08, cutoff: 300, hum: .1 },
+  { wind: .14, cutoff: 300, hum: .21 },
+  { wind: .18, cutoff: 400, hum: .23 },
+  { wind: .12, cutoff: 300, hum: .16 },
 ];
 const target = { wind: 0, cutoff: 400, hum: 0, engine: 0, engineTone: 0 };
 
