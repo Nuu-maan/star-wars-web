@@ -502,7 +502,9 @@ main { position: relative; }
   text-align: center;
   white-space: nowrap;
 }
-.hint span {
+/* the intro plays on these so it never fights the scrubbed .title/.hint */
+.intro { display: inline-block; }
+.hint .intro > span {
   display: block;
   width: 11px; height: 11px;
   margin: 12px auto 0;

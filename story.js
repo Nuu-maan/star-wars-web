@@ -244,7 +244,7 @@ function ambient() {
 
 // the title card is the one piece of lettering that plays itself
 function openOnTitle() {
-  const title = document.querySelector('.title'), hint = document.querySelector('.hint');
+  const title = document.querySelector('.title .intro'), hint = document.querySelector('.hint .intro');
   gsap.timeline({ defaults: { ease: 'power3.out' } })
     .fromTo(title, { scale: 1.16, autoAlpha: 0, y: 24 }, { scale: 1, autoAlpha: 1, y: 0, duration: 1.2 })
     .fromTo(hint, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .7 }, '-=.5');
@@ -254,7 +254,7 @@ document.querySelector('.skip').addEventListener('click', () => {
   root.classList.add('static');
   ScrollTrigger.getAll().forEach(t => t.kill());
   gsap.globalTimeline.clear();
-  gsap.set('.camera, .layer, .holo, .stage, .act__sticky, [data-in]', { clearProps: 'all' });
+  gsap.set('.camera, .layer, .holo, .stage, .act__sticky, [data-in], .intro', { clearProps: 'all' });
   acts.forEach(preload);
   acts.forEach(act => reveal(act, 'instant'));
   setAuto(false);
