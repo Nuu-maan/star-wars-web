@@ -130,7 +130,7 @@ main { position: relative; }
 .l-sky { inset: 0; }
 .l-sky > img { object-fit: cover; }
 
-.l-suns { width: 40%; right: 3%; top: -4%; aspect-ratio: 1536 / 1024; mix-blend-mode: screen; } /* x22–85 y9–94 */
+.l-suns { width: 40%; right: 3%; top: -4%; aspect-ratio: 1536 / 1024; } /* x22–85 y9–94 */
 
 .l-ridges { width: 100%; left: 0; bottom: calc(100% - var(--horizon)); aspect-ratio: 1672 / 941; }
 .l-ridges > img { transform: translateY(38%); } /* x0–100 y48–62 */
