@@ -155,7 +155,10 @@ function build(act, i) {
     invalidateOnRefresh: true,
     onEnter: () => preload(acts[i + 1]),
     onUpdate: self => lag && lag(clamp(-2, 2, self.getVelocity() / 1400)),
-    onToggle: self => act.classList.toggle('is-active', self.isActive),
+    onToggle: self => {
+      act.classList.toggle('is-active', self.isActive);
+      act.loops?.forEach(t => t.paused(!self.isActive));
+    },
   });
 
   // the seam dips get their own scroll-locked triggers. On the scrubbed timeline they
@@ -223,28 +226,52 @@ document.querySelectorAll('[data-reveal]').forEach(btn =>
 
 /* ------------------------------------------------------------------ chrome */
 
+function idle(targets, vars) {
+  gsap.utils.toArray(targets).forEach(el => {
+    const act = el.closest('.act');
+    const tween = gsap.to(el, { ...vars, repeat: -1, yoyo: true, ease: 'sine.inOut', paused: !act.classList.contains('is-active') });
+    (act.loops ||= []).push(tween);
+  });
+}
+
 function ambient() {
   gsap.fromTo('#progress', { scaleX: 0 },
     { scaleX: 1, ease: 'none', scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: .4 } });
 
-  gsap.to('.l-dust, .l-snow, .l-aurora', { xPercent: -3, duration: 40, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-  gsap.to('.l-suns', { opacity: .86, duration: 4.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-  gsap.to('.l-suns', { scale: 1.035, duration: 8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+  idle('.l-dust, .l-snow, .l-aurora', { xPercent: -3, duration: 40 });
+  idle('.l-suns', { opacity: .86, duration: 4.5 });
+  idle('.l-suns', { scale: 1.035, duration: 8 });
 
   // the frame breathes a little under the pointer
   if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    const x = gsap.quickTo('.stage', 'x', { duration: .9, ease: 'power3' });
-    const y = gsap.quickTo('.stage', 'y', { duration: .9, ease: 'power3' });
+    const stages = acts.map(act => {
+      const stage = act.querySelector('.stage');
+      return [act, gsap.quickTo(stage, 'x', { duration: .9, ease: 'power3' }), gsap.quickTo(stage, 'y', { duration: .9, ease: 'power3' })];
+    });
     addEventListener('pointermove', e => {
-      x((e.clientX / innerWidth - .5) * 22);
-      y((e.clientY / innerHeight - .5) * 14);
+      const x = (e.clientX / innerWidth - .5) * 22, y = (e.clientY / innerHeight - .5) * 14;
+      if (root.classList.contains('lite')) return;
+      stages.forEach(([act, toX, toY]) => { if (act.classList.contains('is-active')) { toX(x); toY(y); } });
     }, { passive: true });
   }
 }
 
+// a machine that can't hold ~35fps while scrolling drops the decorative overlays
+function watchFrames() {
+  const frames = [];
+  gsap.ticker.add(function sample(time, delta) {
+    if (document.hidden || !(lenis.isScrolling || auto.on) || delta > 250) return;
+    frames.push(delta);
+    if (frames.length < 120) return;
+    gsap.ticker.remove(sample);
+    frames.sort((a, b) => a - b);
+    if (frames[60] > 28) root.classList.add('lite');
+  });
+}
+
 // the title card is the one piece of lettering that plays itself
 function openOnTitle() {
-  const title = document.querySelector('.title'), hint = document.querySelector('.hint');
+  const title = document.querySelector('.title .intro'), hint = document.querySelector('.hint .intro');
   gsap.timeline({ defaults: { ease: 'power3.out' } })
     .fromTo(title, { scale: 1.16, autoAlpha: 0, y: 24 }, { scale: 1, autoAlpha: 1, y: 0, duration: 1.2 })
     .fromTo(hint, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .7 }, '-=.5');
@@ -254,7 +281,7 @@ document.querySelector('.skip').addEventListener('click', () => {
   root.classList.add('static');
   ScrollTrigger.getAll().forEach(t => t.kill());
   gsap.globalTimeline.clear();
-  gsap.set('.camera, .layer, .holo, .stage, .act__sticky, [data-in]', { clearProps: 'all' });
+  gsap.set('.camera, .layer, .holo, .stage, .act__sticky, [data-in], .intro', { clearProps: 'all' });
   acts.forEach(preload);
   acts.forEach(act => reveal(act, 'instant'));
   setAuto(false);
@@ -302,6 +329,7 @@ function open(which) {
 function start() {
   acts.forEach(build);
   ambient();
+  watchFrames();
   ScrollTrigger.refresh();
   open('built');
 }

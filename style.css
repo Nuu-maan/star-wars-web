@@ -87,7 +87,6 @@ main { position: relative; }
   background-image: var(--halftone);
   background-size: 3px 3px;
   opacity: .11;
-  mix-blend-mode: multiply;
 }
 
 .stage {
@@ -124,6 +123,8 @@ main { position: relative; }
 .act.is-active .camera,
 .act.is-active .layer { will-change: transform; }
 
+.lite .l-dust, .lite .l-snow, .lite .l-aurora, .lite .act__sticky::after { display: none; }
+
 /* act I · 01-waiting-world */
 
 .act1 { --ratio: 7 / 5; --horizon: 52%; }
@@ -131,7 +132,7 @@ main { position: relative; }
 .l-sky { inset: 0; }
 .l-sky > img { object-fit: cover; }
 
-.l-suns { width: 40%; right: 3%; top: -4%; aspect-ratio: 1536 / 1024; mix-blend-mode: screen; } /* x22–85 y9–94 */
+.l-suns { width: 40%; right: 3%; top: -4%; aspect-ratio: 1536 / 1024; } /* x22–85 y9–94 */
 
 .l-ridges { width: 100%; left: 0; bottom: calc(100% - var(--horizon)); aspect-ratio: 1672 / 941; }
 .l-ridges > img { transform: translateY(38%); } /* x0–100 y48–62 */
@@ -145,10 +146,11 @@ main { position: relative; }
 .l-settlement { width: 34%; left: 8%; bottom: 40%; aspect-ratio: 1672 / 941; }
 .l-settlement > img { transform: translateY(22%); } /* x3–97 y25–78 */
 
-.l-dust { inset: -4% -8%; mix-blend-mode: screen; }
+.l-dust { inset: -4% -8%; }
 .l-dust > img { object-fit: cover; }
 
-.l-shade { inset: 0; background: linear-gradient(to bottom, rgba(40, 12, 6, .9), rgba(40, 12, 6, .35) 60%, rgba(40, 12, 6, .8)); opacity: 0; }
+/* the tints are baked to images: a CSS gradient under the zooming camera re-rasterises every frame in Firefox */
+.l-shade { inset: 0; background: url(assets/tint-shade.png) 0 0 / 100% 100%; opacity: 0; }
 
 .l-rocks-l { width: 60%; left: -4%; bottom: -4%; aspect-ratio: 1536 / 1024; } /* x0–71 y20–100, anchor 0 */
 .l-rocks-r { width: 60%; right: -4%; bottom: -4%; aspect-ratio: 1536 / 1024; } /* x16–100 y22–100, anchor 0 */
@@ -274,10 +276,10 @@ main { position: relative; }
 }
 @keyframes blink { 50% { opacity: .1; } }
 
-.l-snow { inset: -4% -8%; mix-blend-mode: screen; opacity: .4; }
+.l-snow { inset: -4% -8%; opacity: .4; }
 .l-snow > img { object-fit: cover; }
 
-.l-cold { inset: 0; background: linear-gradient(to bottom, rgba(6, 14, 30, .9), rgba(6, 14, 30, .2) 50%, rgba(120, 170, 220, .25)); opacity: 0; }
+.l-cold { inset: 0; background: url(assets/tint-cold.png) 0 0 / 100% 100%; opacity: 0; }
 
 /* act VII · 07-ice-landing */
 
@@ -314,7 +316,7 @@ main { position: relative; }
 .l-dawn { inset: 0; }
 .l-dawn > img { object-fit: cover; }
 
-.l-aurora { width: 84%; left: -8%; top: -12%; aspect-ratio: 1536 / 1024; mix-blend-mode: screen; opacity: 0; }
+.l-aurora { width: 84%; left: -8%; top: -12%; aspect-ratio: 1536 / 1024; opacity: 0; }
 
 .l-run { inset: 0; }
 .l-run > img { object-fit: cover; object-position: 60% 50%; }
@@ -503,7 +505,9 @@ main { position: relative; }
   text-align: center;
   white-space: nowrap;
 }
-.hint span {
+/* the intro plays on these so it never fights the scrubbed .title/.hint */
+.intro { display: inline-block; }
+.hint .intro > span {
   display: block;
   width: 11px; height: 11px;
   margin: 12px auto 0;

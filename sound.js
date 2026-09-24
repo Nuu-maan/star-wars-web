@@ -4,100 +4,128 @@ const soundOn = () => soundRoot.classList.contains('sound');
 
 const BEDS = [
   { wind: .9, cutoff: 900, hum: 0 },
-  { wind: .35, cutoff: 500, hum: .08 },
-  { wind: 1, cutoff: 1300, hum: 0 },
-  { wind: .45, cutoff: 700, hum: .07 },
-  { wind: .12, cutoff: 300, hum: .14 },
+  { wind: .49, cutoff: 500, hum: .11 },
+  { wind: .69, cutoff: 1300, hum: 0 },
+  { wind: .97, cutoff: 700, hum: .15 },
+  { wind: .18, cutoff: 300, hum: .21 },
   { wind: 1, cutoff: 1600, hum: 0 },
   { wind: .85, cutoff: 1100, hum: .05 },
-  { wind: .1, cutoff: 300, hum: .12 },
+  { wind: .13, cutoff: 300, hum: .16 },
   { wind: .6, cutoff: 1300, hum: .06 },
-  { wind: .08, cutoff: 300, hum: .12 },
-  { wind: .12, cutoff: 400, hum: .15 },
-  { wind: .08, cutoff: 300, hum: .1 },
+  { wind: .14, cutoff: 300, hum: .21 },
+  { wind: .18, cutoff: 400, hum: .23 },
+  { wind: .12, cutoff: 300, hum: .16 },
 ];
 const target = { wind: 0, cutoff: 400, hum: 0, engine: 0, engineTone: 0 };
 
-let ctx, master, windGain, windFilter, humGain, engineGain, engineFilter, engineOsc, noiseBuf;
+let ctx, master, windGain, windFilter, humGain, engineGain, engineFilter, engineOsc, brownBuf, whiteBuf;
 
 function chain(...nodes) { nodes.reduce((a, b) => (a.connect(b), b)); }
 
-function noise() {
-  if (!noiseBuf) {
-    noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-    const d = noiseBuf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+function buffer(brown) {
+  const buf = ctx.createBuffer(2, ctx.sampleRate * 6, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) {
+    const d = buf.getChannelData(c);
+    let last = 0;
+    for (let i = 0; i < d.length; i++) {
+      const white = Math.random() * 2 - 1;
+      d[i] = brown ? (last = (last + .02 * white) / 1.02) * 3.5 : white;
+    }
   }
-  const src = new AudioBufferSourceNode(ctx, { buffer: noiseBuf, loop: true });
+  return buf;
+}
+
+function noise(brown = true) {
+  const buf = brown ? (brownBuf ||= buffer(true)) : (whiteBuf ||= buffer(false));
+  const src = new AudioBufferSourceNode(ctx, { buffer: buf, loop: true });
   src.start();
   return src;
+}
+
+function lfo(frequency, depth, param) {
+  const o = new OscillatorNode(ctx, { frequency });
+  chain(o, new GainNode(ctx, { gain: depth }), param);
+  o.start();
 }
 
 function boot() {
   ctx = new AudioContext();
   master = new GainNode(ctx, { gain: 0 });
-  chain(master, new DynamicsCompressorNode(ctx, { threshold: -18, ratio: 6 }), ctx.destination);
+  chain(master, new DynamicsCompressorNode(ctx, { threshold: -24, knee: 12, ratio: 3 }), ctx.destination);
   soundRoot.classList.add('sound-live');
 
-  windFilter = new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 400, Q: .7 });
+  const gust = new GainNode(ctx, { gain: 1 });
+  lfo(.07, .3, gust.gain);
+  lfo(.19, .12, gust.gain);
+  windFilter = new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 400, Q: .5 });
+  lfo(.05, 90, windFilter.frequency);
   windGain = new GainNode(ctx, { gain: 0 });
-  chain(noise(), new BiquadFilterNode(ctx, { type: 'highpass', frequency: 140 }), windFilter, windGain, master);
-  const gust = new OscillatorNode(ctx, { frequency: .07 });
-  chain(gust, new GainNode(ctx, { gain: 300 }), windFilter.frequency);
-  gust.start();
+  chain(noise(), new BiquadFilterNode(ctx, { type: 'highpass', frequency: 60 }), windFilter, gust, windGain, master);
 
   humGain = new GainNode(ctx, { gain: 0 });
   humGain.connect(master);
-  [110, 165.5].forEach(f => {
-    const o = new OscillatorNode(ctx, { type: 'triangle', frequency: f });
-    o.connect(humGain);
+  [[55, .5], [110, .35], [165, .15]].forEach(([frequency, level]) => {
+    const o = new OscillatorNode(ctx, { frequency });
+    chain(o, new GainNode(ctx, { gain: level }), humGain);
     o.start();
   });
 
-  engineOsc = new OscillatorNode(ctx, { type: 'sawtooth', frequency: 70 });
-  engineFilter = new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 200, Q: 2 });
   engineGain = new GainNode(ctx, { gain: 0 });
-  chain(engineOsc, engineFilter, engineGain, master);
+  engineGain.connect(master);
+  engineFilter = new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 120, Q: .8 });
+  chain(noise(), engineFilter, new GainNode(ctx, { gain: 1.6 }), engineGain);
+  engineOsc = new OscillatorNode(ctx, { frequency: 45 });
+  chain(engineOsc, new GainNode(ctx, { gain: .5 }), engineGain);
   engineOsc.start();
 
   gsap.ticker.add(tick);
 }
 
+// scheduling every frame piles automation events onto the params (and crackles in Firefox),
+// so a param is only re-aimed when its target actually moves
+function glide(param, value, time) {
+  value = Math.round(value * 1000) / 1000;
+  if (param.aim === value) return;
+  param.aim = value;
+  param.setTargetAtTime(value, ctx.currentTime, time);
+}
+
 function tick() {
-  const t = ctx.currentTime;
-  const boost = window.lenis ? gsap.utils.clamp(0, 1, Math.abs(lenis.velocity) / 60) : 0;
-  windGain.gain.setTargetAtTime(target.wind * (1 + .5 * boost), t, .5);
-  windFilter.frequency.setTargetAtTime(target.cutoff * (1 + boost), t, .5);
-  humGain.gain.setTargetAtTime(target.hum, t, .3);
-  engineGain.gain.setTargetAtTime(target.engine, t, .15);
-  engineFilter.frequency.setTargetAtTime(200 + 700 * target.engineTone, t, .15);
-  engineOsc.frequency.setTargetAtTime(70 + 20 * target.engineTone, t, .15);
+  const boost = lenis ? Math.round(gsap.utils.clamp(0, 1, Math.abs(lenis.velocity) / 60) * 10) / 10 : 0;
+  glide(windGain.gain, target.wind * .7 * (1 + .4 * boost), .5);
+  glide(windFilter.frequency, target.cutoff * .7 * (1 + .5 * boost), .5);
+  glide(humGain.gain, target.hum, .3);
+  glide(engineGain.gain, target.engine, .15);
+  glide(engineFilter.frequency, 120 + 500 * target.engineTone, .15);
+  glide(engineOsc.frequency, 45 + 25 * target.engineTone, .15);
 }
 
 function holo() {
   const t = ctx.currentTime;
   const g = new GainNode(ctx, { gain: 0 });
   g.connect(master);
-  const trem = new OscillatorNode(ctx, { frequency: 9 });
-  chain(trem, new GainNode(ctx, { gain: .025 }), g.gain);
+  const trem = new OscillatorNode(ctx, { frequency: 7 });
+  chain(trem, new GainNode(ctx, { gain: .02 }), g.gain);
   trem.start();
   trem.stop(t + 9);
-  [196, 198.5, 392].forEach(f => {
-    const o = new OscillatorNode(ctx, { type: 'sawtooth', frequency: f });
-    chain(o, new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 700 }), g);
+  [196, 198.5, 294].forEach(f => {
+    const o = new OscillatorNode(ctx, { type: 'triangle', frequency: f });
+    chain(o, new BiquadFilterNode(ctx, { type: 'lowpass', frequency: 900 }), g);
     o.start();
     o.stop(t + 9);
   });
-  g.gain.linearRampToValueAtTime(.1, t + 1.5);
-  g.gain.setValueAtTime(.1, t + 6);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(.08, t + 1.5);
+  g.gain.setValueAtTime(.08, t + 6);
   g.gain.linearRampToValueAtTime(0, t + 8.5);
 }
 
 function click() {
   const t = ctx.currentTime;
-  const src = noise();
+  const src = noise(false);
   const g = new GainNode(ctx, { gain: .1 });
   chain(src, new BiquadFilterNode(ctx, { type: 'highpass', frequency: 2500 }), g, master);
+  g.gain.setValueAtTime(.1, t);
   g.gain.exponentialRampToValueAtTime(.001, t + .04);
   src.stop(t + .05);
 }
